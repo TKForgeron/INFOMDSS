@@ -1,31 +1,20 @@
 import pandas as pd
 from datetime import datetime
+import requests
+import json
 
+def get_cases_df_il(df: pd.DataFrame, months: int = None) -> pd.DataFrame:
 
-def get_cases_trend(df: pd.DataFrame) -> str:
-    df["date"] = pd.to_datetime(df["date"])
-    df_without_last = df[:-1]
-    df = df_without_last[
-        df_without_last["date"] > datetime.now() - pd.DateOffset(weeks=1)
-    ]
-    latest_cases = get_latest_new_cases(df)
-    week_average = df["cases"].average()
+    """
+    Function that cleans the cases dataframe for Israel, and calculates daily cases from accumulated cases
+    
+    Parameters:
+    df: raw cases_df for israel
+    months: int, how many months of historical data to show, default: entire history
 
-    growth_percentage = (latest_cases - week_average) / week_average * 100
+    Returns: sorted pd.Dataframe with case count in cases column, filtered on last nmonths (based on value of months parameter)
+    """
 
-    if growth_percentage < -30:
-        return "strong decrease"
-    elif growth_percentage < -10:
-        return "decrease"
-    elif growth_percentage < 10:
-        return "neutral"
-    elif growth_percentage < 30:
-        return "increase"
-    else:
-        return "strong increase"
-
-
-def get_last_month_cases_df_il(df: pd.DataFrame) -> pd.DataFrame:
     df["accumulated_cases"] = (
         df["accumulated_cases"].replace(to_replace="<15", value="0").astype(int)
     )
@@ -34,29 +23,84 @@ def get_last_month_cases_df_il(df: pd.DataFrame) -> pd.DataFrame:
     )
     df = df.groupby("date")["cases"].sum().reset_index()
     df["date"] = pd.to_datetime(df["date"])
-    df = df[df["date"] > datetime.now() - pd.DateOffset(months=1)]
+    
+    if months:
+        df = df[df["date"] > datetime.now() - pd.DateOffset(months=months)]
+    try:
+        response = requests.get("https://apis.cbs.gov.il/series/data/list?id=3763&startperiod=01-2021&format=json&download=false&lang=en")
+        country_population = json.loads(response.content)['DataSet']['Series'][0]['obs'][0]['Value'] * 1000
+    except:
+        country_population = 9217000
+
+    df['cases_per_100k'] = round(df['cases'] / country_population * 100000, 1)
+
     df = df.sort_values(by=["date"])
     return df
 
 
-def get_last_month_cases_df_nsw(df: pd.DataFrame) -> pd.DataFrame:
-    df["notification_date"] = pd.to_datetime(df["notification_date"])
-    df = df[df["notification_date"] > datetime.now() - pd.DateOffset(months=1)]
-    df = df.groupby("notification_date").size().reset_index(name="cases")
-    df = df.sort_values(by=["notification_date"])
+def get_cases_df_nsw(df: pd.DataFrame, months: int = None) -> pd.DataFrame:
+
+    """
+    Function that cleans the cases dataframe for NSW, and calculates daily cases from amount of rows
+    
+    Parameters:
+    df: raw cases_df for nsw
+    months: int, how many months of historical data to show, default: entire history
+
+    Returns: sorted pd.Dataframe with case count in cases column, filtered on last nmonths (based on value of months parameter)
+    """
+
+
+    df = df.rename({"notification_date": "date"}, axis='columns')
+    df["date"] = pd.to_datetime(df["date"])
+    if months:
+        df = df[df["date"] > datetime.now() - pd.DateOffset(months=1)]
+    df = df.groupby("date").size().reset_index(name="cases")
+
+
+    try:
+        response = requests.get("https://stat.data.abs.gov.au/sdmx-json/data/ERP_QUARTERLY/1.1.3.TT.Q/all?startTime=2021-Q1")
+        observations = json.loads(response.content)['dataSets'][0]['series']["0:0:0:0:0"]['observations']
+        latest_observation_key = sorted(observations.keys())[-1]
+        country_population = observations[latest_observation_key][0]
+    except:
+        country_population = 8176369
+
+    df['cases_per_100k'] = round(df['cases'] / country_population * 100000, 1)
+    df = df.sort_values(by=["date"])
     return df
 
 
-def get_last_month_cases_df_nl(df: pd.DataFrame) -> pd.DataFrame:
+def get_cases_df_nl(df: pd.DataFrame, months: int = None) -> pd.DataFrame:
+    
+    """
+    Function that cleans the cases dataframe for the Netherlands, and calculates daily cases from the sum of reported cases per muncipality
+    
+    Parameters:
+    df: raw cases_df for the Netherlands
+    months: int, how many months of historical data to show, default: entire history
 
+    Returns: sorted pd.Dataframe with case count in cases column, filtered on last nmonths (based on value of months parameter)
+    """
+
+    df = df.rename({"Date_of_publication": "date"},axis='columns')
+    
     df = (
-        df.groupby("Date_of_publication").Total_reported.sum().reset_index(name="cases")
+        df.groupby("date")['Total_reported'].sum().reset_index(name="cases")
     )
-    df["Date_of_publication"] = pd.to_datetime(df["Date_of_publication"])
-    df = df[df.Date_of_publication > datetime.now() - pd.DateOffset(months=1)]
-    df.sort_values(by=["Date_of_publication"])
+    df["date"] = pd.to_datetime(df["date"])
+    if months:
+        df = df[df['date'] > datetime.now() - pd.DateOffset(months=1)]
+
+    try:
+        response = requests.get("https://opendata.cbs.nl/ODataApi/odata/37296ned/TypedDataSet")
+        country_population = json.loads(response.content)['value'][-1]['TotaleBevolking_1']
+    except:
+        country_population = 17183583
+
+    df['cases_per_100k'] = round(df['cases'] / country_population * 100000, 1)
+
+    df.sort_values(by=["date"])
     return df
 
 
-def get_latest_new_cases(df: pd.DataFrame) -> int:
-    return df["cases"].iloc[-1]
