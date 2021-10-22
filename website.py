@@ -13,7 +13,10 @@ class Website:
     def get_html(self):
         allHtml = []
         allHtml = allHtml + Header().get_html()
-        self.html = allHtml
+        self.html = html.Div(
+            className="pageContainer",
+            children=allHtml
+        )
 
     def run_website(self, allHtml):
         app = dash.Dash(__name__)

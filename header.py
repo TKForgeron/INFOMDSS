@@ -6,7 +6,9 @@ class Header:
 
     def get_html(self):
         return [html.Div(
-            children="""
-        Dash: A web application framework for your data.
-    """
+            className="appHeader",
+            children=[
+                    html.H1('Dashboard'),
+                    html.H2('Project DSS')
+                ]
         )]
