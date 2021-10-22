@@ -14,17 +14,17 @@ import helpers
 
 app = dash.Dash(__name__)
 
-cases_il = pd.read_csv("data/Israel/cases/geographic-sum-per-day-ver_00536_DS4.csv")
+cases_il = pd.read_csv("data/Israel/geographic-sum-per-day-ver_00536_DS4.csv")
 cases_il = cases.get_cases_df_il(cases_il, months=1)
 
 vaccinations_il = pd.read_csv("data/Israel/vaccinated_city_table_ver_00218_DS5.csv")
 vaccinations_il = vaccinations.get_vaccinations_df_il(vaccinations_il, months=1)
 
-cases_nsw = pd.read_csv("data/NSW/cases/confirmed_cases_table2_age_group_DS6.csv")
+cases_nsw = pd.read_csv("data/NSW/confirmed_cases_table2_age_group_DS6.csv")
 cases_nsw = cases.get_cases_df_nsw(cases_nsw, months=1)
 
 cases_nl = pd.read_csv(
-    "data/Netherlands/cases/COVID-19_aantallen_gemeente_per_dag.csv", sep=";"
+    "data/Netherlands/COVID-19_aantallen_gemeente_per_dag.csv", sep=";"
 )
 cases_nl = cases.get_cases_df_nl(cases_nl, months=1)
 
@@ -33,7 +33,7 @@ fig_nsw = px.line(cases_nsw, x="date", y="cases")
 fig_il = px.line(cases_il, x="date", y="cases")
 
 
-fig_il_vaccinations = px.line(vaccinations_il, x="date", y ="vaccinations")
+fig_il_vaccinations = px.line(vaccinations_il, x="date", y="vaccinations")
 
 app.layout = html.Div(
     children=[
@@ -45,15 +45,15 @@ app.layout = html.Div(
         ),
         dcc.Graph(id="nl_graph", figure=fig_nl),
         html.H5(
-            children = f"Latest cases: {helpers.get_latest_kpi_value(cases_nl, 'cases')}, Latest cases per 100k: {helpers.get_latest_kpi_value(cases_nl, 'cases_per_100k')}, Trend {helpers.get_kpi_trend(cases_nl, 'cases')}"
+            children=f"Latest cases: {helpers.get_latest_kpi_value(cases_nl, 'cases')}, Latest cases per 100k: {helpers.get_latest_kpi_value(cases_nl, 'cases_per_100k')}, Trend {helpers.get_kpi_trend(cases_nl, 'cases')}"
         ),
         dcc.Graph(id="nsw_graph", figure=fig_nsw),
         html.H5(
-            children = f"Latest cases: {helpers.get_latest_kpi_value(cases_nsw, 'cases')}, Latest cases per 100k: {helpers.get_latest_kpi_value(cases_nsw, 'cases_per_100k')}, Trend {helpers.get_kpi_trend(cases_nsw, 'cases')}"
+            children=f"Latest cases: {helpers.get_latest_kpi_value(cases_nsw, 'cases')}, Latest cases per 100k: {helpers.get_latest_kpi_value(cases_nsw, 'cases_per_100k')}, Trend {helpers.get_kpi_trend(cases_nsw, 'cases')}"
         ),
         dcc.Graph(id="il_graph", figure=fig_il),
         html.H5(
-            children = f"Latest cases: {helpers.get_latest_kpi_value(cases_il, 'cases')}, Latest cases per 100k: {helpers.get_latest_kpi_value(cases_il, 'cases_per_100k')}, Trend {helpers.get_kpi_trend(cases_il, 'cases')}"
+            children=f"Latest cases: {helpers.get_latest_kpi_value(cases_il, 'cases')}, Latest cases per 100k: {helpers.get_latest_kpi_value(cases_il, 'cases_per_100k')}, Trend {helpers.get_kpi_trend(cases_il, 'cases')}"
         ),
         dcc.Graph(id="il_vaccinations_graph", figure=fig_il_vaccinations),
     ]
