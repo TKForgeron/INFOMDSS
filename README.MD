@@ -10,14 +10,14 @@
 - Get country population for NL
 - Get country population for NSW
 - Get country population for IL
+- Temperature NSW
+- Temperature IL
 
 # To Do (Need data sources):
 
 - Hospitalizations NSW
 - Vaccinations NL
 - Vaccinations NSW
-- Temperature NSW
-- Temperature IL
 - Cases per age group NL
 - Cases per age group NSW
 - Cases per age group IL
