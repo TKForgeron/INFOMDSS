@@ -85,18 +85,69 @@ h2 {
   margin: 0;
   font-size: 13px;
 }
-.trendIncrease {
+.trendbox {
   text-align: center;
-  background-color: #FB5050;
   width: 70%;
-  border: 2px solid #FB5050;
   border-radius: 3px;
   margin: auto;
 }
-.trendIncrease p {
+.trendbox p {
   text-align: center;
-  color: #fff;
   font-size: 14px;
   font-weight: 400;
   margin: 6px 0px;
+}
+
+.negativeColors .trend_si, .positiveColors .trend_sd {
+  background-color: #FB5050;
+  border: 2px solid #FB5050;
+  color: #fff !important;
+}
+.negativeColors .trend_i , .positiveColors .trend_d{
+  background-color: #f4b20d;
+  border: 2px solid #f4b20d;
+  color: #000 !important;
+}
+.negativeColors .trend_n, .positiveColors .trend_n {
+  background-color: #D4D4D4;
+  border: 2px solid #D4D4D4;
+  color: #000 !important;
+}
+.negativeColors .trend_d, .positiveColors .trend_i {
+  background-color: #6ed239;
+  border: 2px solid #6ed239;
+  color: #163d10 !important;
+}
+.negativeColors .trend_sd, .positiveColors .trend_si {
+  background-color: #55a42b;
+  border: 2px solid #55a42b;
+  color: #fff !important;
+}
+
+.compairedCountries span {
+  display: inline-block;
+  width: 100%;
+  text-align: right;
+  }
+.compairedCountries span p {
+  display: inline-block;
+  margin: 0px;
+  font-size: 13px;
+  text-align: right;
+  font-weight: 600;
+  }
+.compairedCountries .lightpar {
+  font-weight: 400;
+  text-align: left !important;
+  min-width: 37px;
+  margin-left: 10px;
+}
+.negativeColors .compairedCountries .trendArrowUp, .positiveColors .compairedCountries .trendArrowDown {
+  filter: invert(57%) sepia(86%) saturate(2248%) hue-rotate(323deg) brightness(101%) contrast(81%); 
+}
+.negativeColors .compairedCountries .trendArrowDown, .positiveColors .compairedCountries .trendArrowUp {
+  filter: invert(73%) sepia(60%) saturate(5640%) hue-rotate(118deg) brightness(95%) contrast(104%);
+}
+.trendArrow {
+  display: inline-block;
 }

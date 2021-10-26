@@ -47,7 +47,7 @@ class CurrentSituation:
                             html.Hr()
                         ]),
                     html.Div(
-                        className="situationBox",
+                        className="situationBox negativeColors",
                         children=[
                             html.Div(
                                 className="fiveGrid",
@@ -55,7 +55,7 @@ class CurrentSituation:
                             ),
                             html.Div(
                                 className="fiveGrid",
-                                children= html.H4('Cases')
+                                children= html.H4('Graph')
                             ),
                             html.Div(
                                 className="fiveGrid",
@@ -75,16 +75,32 @@ class CurrentSituation:
                             ),
                             html.Div(
                                 className="fiveGrid",
-                                children= html.H4('Cases')
+                                children= [
+                                    html.Div(
+                                        className="compairedCountries",
+                                        children= [
+                                            html.Span(children= [
+                                                    html.P("Israël:"),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(cases_il, 'cases')),
+                                                    helpers.get_kpi_trend_arrow(cases_il, 'cases')
+                                                ]),
+                                            html.Span(children= [
+                                                    html.P("Australia (NSW):"),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(cases_nsw, 'cases')),
+                                                    helpers.get_kpi_trend_arrow(cases_nsw, 'cases')
+                                                ]),
+                                        ]
+                                    )
+                                ]
                             )
                         ]),
                     html.Div(
-                        className="situationBox",
+                        className="situationBox negativeColors",
                         children=[
                             html.H4('Hospitalisations')
                         ]),
                      html.Div(
-                        className="situationBox",
+                        className="situationBox positiveColors",
                         children=[
                             html.H4('Vaccinations')
                         ])
