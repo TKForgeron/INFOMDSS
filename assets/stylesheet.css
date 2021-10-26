@@ -37,6 +37,7 @@ h2 {
 .titleBar {
   width: 100%;
   display: inline-block;
+  margin-bottom: 20px;
 }
 .titleBar h3 {
   float: left;
@@ -53,4 +54,49 @@ h2 {
   margin-top: 16px;
   color: #00C678;
   background-color: #00C678;
+}
+.situationBox {
+  margin-bottom: 15px;
+  background-color: #FBFBFB;
+  border-radius: 8px;
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.14);
+  padding: 10px 20px;
+}
+.situationBox h4 {
+  font-weight: 400;
+  font-size: 16px;
+  color: #070A1B;
+  margin: 0px;
+}
+.fiveGrid {
+  vertical-align: middle;
+  width: 20%;
+  display: inline-block;
+}
+
+.counter h5 {
+  text-align: center;
+  font-weight: 400;
+  font-size: 20px;
+  margin: 0;
+}
+.counter p {
+  text-align: center;
+  margin: 0;
+  font-size: 13px;
+}
+.trendIncrease {
+  text-align: center;
+  background-color: #FB5050;
+  width: 70%;
+  border: 2px solid #FB5050;
+  border-radius: 3px;
+  margin: auto;
+}
+.trendIncrease p {
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 6px 0px;
 }

@@ -1,5 +1,6 @@
 import pandas as pd
 from datetime import datetime
+from dash import html
 
 def get_latest_kpi_value(df: pd.DataFrame, kpi_col: str) -> int:
 
@@ -26,12 +27,12 @@ def get_kpi_trend(df: pd.DataFrame, kpi_col: str) -> str:
     growth_percentage = (latest_cases - week_average) / week_average * 100
 
     if growth_percentage < -30:
-        return "Strong decrease"
+        return html.Div(className="trendStrongDecrease", children=html.P('Strong Decrease'))
     elif growth_percentage < -10:
-        return "Decrease"
+        return html.Div(className="trendDecrease", children=html.P('Decrease'))
     elif growth_percentage < 10:
-        return "Neutral"
+        return html.Div(className="trendNeutral", children=html.P('Neutral'))
     elif growth_percentage < 30:
-        return "Increase"
+        return html.Div(className="trendIncrease", children=html.P('Increase'))
     else:
-        return "Strong increase"
+        return html.Div(className="trendStrongIncrease", children=html.P('Strong Increase'))
