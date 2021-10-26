@@ -1,8 +1,8 @@
 import dash
 from header import Header
+from current_situation import CurrentSituation
 from dash import dcc
 from dash import html
-
 
 class Website:
     def __init__(self):
@@ -12,7 +12,7 @@ class Website:
 
     def get_html(self):
         allHtml = []
-        allHtml = allHtml + Header().get_html()
+        allHtml = allHtml + Header().get_html() + CurrentSituation().get_html()
         self.html = html.Div(
             className="pageContainer",
             children=allHtml
