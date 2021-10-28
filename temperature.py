@@ -2,7 +2,9 @@ import pandas as pd
 import requests
 from datetime import datetime
 import json
+from zipfile import ZipFile
 from io import BytesIO
+import urllib.request as urllib2
 
 
 def get_temperature_df_il(start_date: datetime = None) -> pd.DataFrame:
@@ -91,6 +93,7 @@ def get_temperature_df_nl(start_date: datetime = None) -> pd.DataFrame:
 
 
 def get_temperature_df_nsw(start_date: datetime = None) -> pd.DataFrame:
+
     """
 
     Function that reads temperature data from NSW. It returns the average temperature on each day from October 19th 2017 onwards.
@@ -118,3 +121,6 @@ def get_temperature_df_nsw(start_date: datetime = None) -> pd.DataFrame:
         df = df[df["date"] >= start_date]
 
     return df
+
+
+get_temperature_df_nsw()
