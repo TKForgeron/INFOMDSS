@@ -18,7 +18,9 @@ def get_hospitalizations_df_il(start_date: datetime = None) -> pd.DataFrame:
 
     """
 
-    df = pd.read_csv("data/Israel/geographic-sum-per-day-ver_00536_DS4.csv")
+    df = pd.read_csv(
+        "data/Israel/Israel_COVIDandVaccinated/geographic-sum-per-day-ver_00536_DS4.csv"
+    )
 
     df["accumulated_hospitalized"] = (
         df["accumulated_hospitalized"]

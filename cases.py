@@ -17,7 +17,9 @@ def get_cases_df_il(start_date: datetime = None) -> pd.DataFrame:
         df with columns [date, cases, cases_per_100k]
     """
 
-    df = pd.read_csv("data/Israel/geographic-sum-per-day-ver_00536_DS4.csv")
+    df = pd.read_csv(
+        "data/Israel/Israel_COVIDandVaccinated/geographic-sum-per-day-ver_00536_DS4.csv"
+    )
 
     df["accumulated_cases"] = (
         df["accumulated_cases"].replace(to_replace="<15", value="0").astype(int)
