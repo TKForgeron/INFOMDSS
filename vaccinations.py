@@ -57,11 +57,8 @@ def get_vaccinations_df_il(start_date: datetime = None) -> pd.DataFrame:
 
     df = df.sort_values(by=["date"])
     df = df[["date", "vaccination_coverage"]]
-    print(df)
+
     return df
-
-
-get_vaccinations_df_il()
 
 
 def get_vaccinations_df_nl(start_date: datetime = None) -> pd.DataFrame:

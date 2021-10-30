@@ -7,7 +7,7 @@ from io import BytesIO
 import urllib.request as urllib2
 
 
-def get_temperature_df_il(start_date: datetime = None) -> pd.DataFrame:
+def get_temperatures_df_il(start_date: datetime = None) -> pd.DataFrame:
 
     """
 
@@ -36,7 +36,7 @@ def get_temperature_df_il(start_date: datetime = None) -> pd.DataFrame:
     return df
 
 
-def get_temperature_df_nl(start_date: datetime = None) -> pd.DataFrame:
+def get_temperatures_df_nl(start_date: datetime = None) -> pd.DataFrame:
 
     """
 
@@ -92,7 +92,7 @@ def get_temperature_df_nl(start_date: datetime = None) -> pd.DataFrame:
     return df
 
 
-def get_temperature_df_nsw(start_date: datetime = None) -> pd.DataFrame:
+def get_temperatures_df_nsw(start_date: datetime = None) -> pd.DataFrame:
 
     """
 
@@ -121,6 +121,3 @@ def get_temperature_df_nsw(start_date: datetime = None) -> pd.DataFrame:
         df = df[df["date"] >= start_date]
 
     return df
-
-
-get_temperature_df_nsw()
