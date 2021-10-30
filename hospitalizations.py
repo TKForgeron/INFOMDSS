@@ -18,9 +18,15 @@ def get_hospitalizations_df_il(start_date: datetime = None) -> pd.DataFrame:
 
     """
 
-    df = pd.read_csv(
-        "data/Israel/Israel_COVIDandVaccinated/geographic-sum-per-day-ver_00536_DS4.csv"
-    )
+    try:
+        endpoint = "https://data.gov.il/api/3/action/datastore_search?resource_id=d07c0771-01a8-43b2-96cc-c6154e7fa9bd&limit=1000000"
+        response = requests.get(endpoint)
+        records = json.loads(response.content)["result"]["records"]
+        df = pd.DataFrame(records)
+    except:
+        df = pd.read_csv(
+            "data/Israel/Israel_COVIDandVaccinated/geographic-sum-per-day-ver_00536_DS4.csv"
+        )
 
     df["accumulated_hospitalized"] = (
         df["accumulated_hospitalized"]
@@ -29,11 +35,11 @@ def get_hospitalizations_df_il(start_date: datetime = None) -> pd.DataFrame:
         .astype(int)
     )
 
-    df = df.groupby("date").sum("accumulated_hospitalized").reset_index()
 
-    df["hospitalizations"] = df.groupby(["town_code"])[
-        "accumulated_hospitalized"
-    ].transform(lambda s: s.sub(s.shift().fillna(0)).abs())
+    df = df.groupby("date").sum("accumulated_hospitalized").reset_index()
+    df["hospitalizations"] = df["accumulated_hospitalized"].transform(
+        lambda s: s.sub(s.shift().fillna(0)).abs()
+    )
 
     df["date"] = pd.to_datetime(df["date"])
 
@@ -42,6 +48,7 @@ def get_hospitalizations_df_il(start_date: datetime = None) -> pd.DataFrame:
 
     df.sort_values(by=["date"])
     df = df[["date", "hospitalizations"]]
+
 
     return df
 
@@ -59,10 +66,12 @@ def get_hospitalizations_df_nl(start_date: datetime = None) -> pd.DataFrame:
         df with columns [date, hospitalizations]
 
     """
-
-    df = pd.read_csv(
-        "data/Netherlands/COVID-19_aantallen_gemeente_per_dag.csv", sep=";"
-    )
+    try:
+        df = pd.read_csv('https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv',sep=';')
+    except:
+        df = pd.read_csv(
+            "data/Netherlands/COVID-19_aantallen_gemeente_per_dag.csv", sep=";"
+        )
 
     df = (
         df.groupby("Date_of_publication")["Hospital_admission"]
@@ -143,3 +152,5 @@ def get_hospitalizations_df_nsw(start_date: datetime = None) -> pd.DataFrame:
     df.sort_values(by=["date"])
 
     return df
+
+
