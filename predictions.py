@@ -1,5 +1,7 @@
 import pandas as pd
+import numpy as np
 from statistics import mean
+import random
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import (
@@ -7,11 +9,23 @@ from sklearn.model_selection import (
     cross_val_score,
     KFold,
 )
-from sklearn.linear_model import LogisticRegression, LinearRegression
+from sklearn.neighbors import KNeighborsRegressor, RadiusNeighborsRegressor
+from sklearn.linear_model import (
+    LinearRegression,
+    SGDRegressor,
+    HuberRegressor,
+    Perceptron,
+    BayesianRidge,
+)
+from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.cross_decomposition import PLSRegression
+from sklearn.neural_network import MLPRegressor
+from sklearn.isotonic import IsotonicRegression
 
 import preprocessing_predictions as prep
 
@@ -41,3 +55,20 @@ random_forest_regressor = RandomForestRegressor(
     max_features="log2",
     criterion="absolute_error",
 )
+
+regressors = [
+    KNeighborsRegressor(),
+    RadiusNeighborsRegressor(),
+    LinearRegression(),
+    SGDRegressor(),
+    HuberRegressor(),
+    Perceptron(),
+    BayesianRidge(),
+    IsotonicRegression(),
+    DecisionTreeRegressor(),
+    GaussianProcessRegressor(),
+    PLSRegression(),
+    MLPRegressor(),
+    RandomForestRegressor(),
+    AdaBoostRegressor(),
+]
