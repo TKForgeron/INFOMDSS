@@ -14,6 +14,7 @@ def get_vaccinations_df_il(start_date: datetime = None) -> pd.DataFrame:
 
     """
     # Try to get data from api, else read base dataframe
+
     try:
         endpoint = "https://data.gov.il/api/3/action/datastore_search?resource_id=12c9045c-1bf4-478a-a9e1-1e876cc2e182&limit=1000000"
         response = requests.get(endpoint)
@@ -41,22 +42,26 @@ def get_vaccinations_df_il(start_date: datetime = None) -> pd.DataFrame:
     df[vaccination_columns] = (
         df[vaccination_columns].replace(to_replace="<15", value="0").astype(float)
     )
-
+ 
     df["accumulated_vaccinations"] = df[vaccination_columns].sum(axis=1)
 
     df = df.groupby("date")["accumulated_vaccinations"].sum().reset_index()
 
-    df["vaccination_coverage"] = (
-        df["accumulated_vaccinations"] / populations.get_population_il() * 100
+    df["vaccinations"] = df["accumulated_vaccinations"].transform(
+        lambda s: s.sub(s.shift().fillna(0)).abs()
     )
 
     df["date"] = pd.to_datetime(df["date"])
+    df['date'] = df['date'].dt.isocalendar().year.astype(str) + "-W" + df['date'].dt.isocalendar().week.astype(str) + "-1"
+    df['date'] = pd.to_datetime(df['date'], format='%G-W%V-%u')
+
+    df = df.groupby("date")["vaccinations"].sum().reset_index()
 
     if start_date:
         df = df[df["date"] >= start_date]
 
     df = df.sort_values(by=["date"])
-    df = df[["date", "vaccination_coverage"]]
+    df = df[["date", "vaccinations"]]
 
     return df
 
@@ -99,10 +104,14 @@ def get_vaccinations_df_nl(start_date: datetime = None) -> pd.DataFrame:
             * 0.01
         )
 
-    df["vaccination_coverage"] = (
-        df.drop("date", axis=1).sum(axis=1) / populations.get_population_nl() * 100
+    df["vaccinations"] = (
+        df.drop("date", axis=1).sum(axis=1) 
     )
-    df = df[["date", "vaccination_coverage"]]
+
+    df["vaccinations"] = df["vaccinations"].transform(
+        lambda s: s.sub(s.shift().fillna(0)).abs()
+    )
+    df = df[["date", "vaccinations"]]
 
     return df
 
@@ -127,11 +136,8 @@ def get_vaccinations_df_nsw(start_date: datetime = None) -> pd.DataFrame:
     )
     df["vaccination_coverage"] = df["vaccination_coverage"].astype(float)
 
-    df["vaccination_absolutes"] = df["vaccination_coverage"] * df["population"]
-
-    vaccination_coverage = df["vaccination_absolutes"].sum() / df["population"].sum()
-    df = df[["date", "vaccination_coverage"]].iloc[[0]]
-    df["vaccination_coverage"] = vaccination_coverage
+    df["vaccinations"] = df["vaccination_coverage"] * df["population"]
+    df = df[["date", "vaccinations"]].iloc[[0]]
 
     return df
 
