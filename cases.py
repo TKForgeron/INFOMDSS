@@ -32,7 +32,7 @@ def get_cases_df_il(start_date: datetime = None) -> pd.DataFrame:
     )
 
     df["date"] = pd.to_datetime(df["date"])
-
+    
     if start_date:
         df = df[df["date"] >= start_date]
 

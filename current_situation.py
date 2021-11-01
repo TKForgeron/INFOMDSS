@@ -7,27 +7,21 @@ import pandas as pd
 from datetime import datetime
 import cases
 import vaccinations
+import hospitalizations
 import helpers
 
-cases_il = pd.read_csv("data/Israel/cases/geographic-sum-per-day-ver_00536_DS4.csv")
-cases_il = cases.get_cases_df_il(cases_il, months=1)
+cases_nl = cases.get_cases_df_nl()
+cases_il = cases.get_cases_df_il()
+cases_nsw = cases.get_cases_df_nsw()
 
-vaccinations_il = pd.read_csv("data/Israel/vaccinated_city_table_ver_00218_DS5.csv")
-vaccinations_il = vaccinations.get_vaccinations_df_il(vaccinations_il, months=1)
+vaccinations_nl = vaccinations.get_vaccinations_df_nl()
+vaccinations_il = vaccinations.get_vaccinations_df_il()
+vaccinations_nsw = vaccinations.get_vaccinations_df_nsw()
 
-cases_nsw = pd.read_csv("data/NSW/cases/confirmed_cases_table2_age_group_DS6.csv")
-cases_nsw = cases.get_cases_df_nsw(cases_nsw, months=1)
+hospitalizations_nl = hospitalizations.get_hospitalizations_df_nl()
+hospitalizations_il = hospitalizations.get_hospitalizations_df_il()
+hospitalizations_nsw = hospitalizations.get_hospitalizations_df_nsw()
 
-cases_nl = pd.read_csv(
-    "data/Netherlands/cases/COVID-19_aantallen_gemeente_per_dag.csv", sep=";"
-)
-cases_nl = cases.get_cases_df_nl(cases_nl, months=1)
-
-fig_nl = px.line(cases_nl, x="date", y="cases")
-fig_nsw = px.line(cases_nsw, x="date", y="cases")
-fig_il = px.line(cases_il, x="date", y="cases")
-
-fig_il_vaccinations = px.line(vaccinations_il, x="date", y ="vaccinations")
 
 class CurrentSituation:
     def __init__(self):
@@ -123,7 +117,7 @@ class CurrentSituation:
                                 className="fiveGrid cs_graph",
                                 children=dcc.Graph(id="cs_hosp_graph", className="cs_graph", figure={
                                     'data': [
-                                        { 'x': cases_nl['date'], 'y': cases_nl['cases'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '%{x}<br><b>%{y} Cases</b><extra></extra>' }
+                                        { 'x': hospitalizations_nl['date'], 'y': hospitalizations_nl['hospitalizations'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '%{x}<br><b>%{y} Cases</b><extra></extra>' }
                                     ],
                                     'layout': {
                                         'xaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False },
@@ -149,7 +143,7 @@ class CurrentSituation:
                                     html.Div(
                                         className="counter",
                                         children= [
-                                            html.H5(children= helpers.get_latest_kpi_value(cases_nl, 'cases')),
+                                            html.H5(children= helpers.get_latest_kpi_value(hospitalizations_nl, 'hospitalizations')),
                                             html.P("since yesterday")
                                         ]
                                     )
@@ -167,13 +161,13 @@ class CurrentSituation:
                                         children= [
                                             html.Span(children= [
                                                     html.P("Israël:"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(cases_il, 'cases')),
-                                                    helpers.get_kpi_trend_arrow(cases_il, 'cases')
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(hospitalizations_il, 'hospitalizations')),
+                                                    helpers.get_kpi_trend_arrow(hospitalizations_il, 'hospitalizations')
                                                 ]),
                                             html.Span(children= [
                                                     html.P("Australia (NSW):"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(cases_nsw, 'cases')),
-                                                    helpers.get_kpi_trend_arrow(cases_nsw, 'cases')
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(hospitalizations_nsw, 'hospitalizations')),
+                                                    helpers.get_kpi_trend_arrow(hospitalizations_nsw, 'hospitalizations')
                                                 ]),
                                         ]
                                     )
@@ -183,7 +177,70 @@ class CurrentSituation:
                      html.Div(
                         className="situationBox positiveColors",
                         children=[
-                            html.H4('Vaccinations')
+                            html.Div(
+                                className="fiveGrid",
+                                children= html.H4('Vaccination')
+                            ),
+                            html.Div(
+                                className="fiveGrid cs_graph",
+                                children=dcc.Graph(id="cs_vac_graph", className="cs_graph", figure={
+                                    'data': [
+                                        { 'x': vaccinations_nl['date'], 'y': vaccinations_nl['vaccinations'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '%{x}<br><b>%{y} Cases</b><extra></extra>' }
+                                    ],
+                                    'layout': {
+                                        'xaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False },
+                                        'yaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False, 'automargin': False },
+                                        'autosize': True,
+                                        'plot_bgcolor': 'rgba(255, 255, 255, 0)',
+                                        'margin': { 'b': 0, 't': 0, 'r': 0, 'l': 0 },
+                                        'marker': False,
+                                        'hovermode': 'x',
+                                        'hoverlabel': {
+                                            'bordercolor': 'rgb(229 229 229)',
+                                            'bgcolor': 'white',
+                                            'font': {
+                                                'color': 'black'
+                                            }
+                                        }
+                                    }
+                                }, config={ 'staticPlot': False })
+                            ),
+                            html.Div(
+                                className="fiveGrid",
+                                children= [
+                                    html.Div(
+                                        className="counter",
+                                        children= [
+                                            html.H5(children= helpers.get_latest_kpi_value(vaccinations_nl, 'vaccinations')),
+                                            html.P("since yesterday")
+                                        ]
+                                    )
+                                ]
+                            ),
+                            html.Div(
+                                className="fiveGrid",
+                                children= helpers.get_kpi_trend(vaccinations_nl, 'vaccinations')
+                            ),
+                            html.Div(
+                                className="fiveGrid",
+                                children= [
+                                    html.Div(
+                                        className="compairedCountries",
+                                        children= [
+                                            html.Span(children= [
+                                                    html.P("Israël:"),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(vaccinations_il, 'vaccinations')),
+                                                    helpers.get_kpi_trend_arrow(vaccinations_il, 'vaccinations')
+                                                ]),
+                                            html.Span(children= [
+                                                    html.P("Australia (NSW):"),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(vaccinations_nsw, 'vaccinations')),
+                                                    helpers.get_kpi_trend_arrow(vaccinations_nsw, 'vaccinations')
+                                                ]),
+                                        ]
+                                    )
+                                ]
+                            )
                         ])
 
             ]
