@@ -151,3 +151,21 @@ h2 {
 .trendArrow {
   display: inline-block;
 }
+
+.modebar{
+  display: none !important;
+}
+
+.cs_graph {
+  height: 100px;
+}
+.cs_graph .point {
+  opacity: 0 !important;
+}
+.cs_graph .main-svg {
+  background: transparent !important;
+}
+
+.cs_graph .cs_graph_hover {
+  padding: 3px;
+}
