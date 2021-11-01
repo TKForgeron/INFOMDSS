@@ -148,6 +148,10 @@ def get_hospitalizations_df_nsw(start_date: datetime = None) -> pd.DataFrame:
 
     if start_date:
         df = df[df["date"] >= start_date]
+    
+    # Clean ',' used to indicate thousands so change '1,164' to '1164' and convert them as int 
+    df["hospitalizations"] = df["hospitalizations"].str.replace(',', '')
+    df["hospitalizations"] = df["hospitalizations"].astype(int)
 
     df.sort_values(by=["date"])
 
