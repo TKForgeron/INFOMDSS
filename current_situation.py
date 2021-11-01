@@ -4,28 +4,37 @@ from dash import dcc
 from dash import html
 import plotly.express as px
 import pandas as pd
-from datetime import datetime
-import cases
-import vaccinations
-import hospitalizations
+from datetime import datetime, timedelta
 import helpers
 
-cases_nl = cases.get_cases_df_nl()
-cases_il = cases.get_cases_df_il()
-cases_nsw = cases.get_cases_df_nsw()
-
-vaccinations_nl = vaccinations.get_vaccinations_df_nl()
-vaccinations_il = vaccinations.get_vaccinations_df_il()
-vaccinations_nsw = vaccinations.get_vaccinations_df_nsw()
-
-hospitalizations_nl = hospitalizations.get_hospitalizations_df_nl()
-hospitalizations_il = hospitalizations.get_hospitalizations_df_il()
-hospitalizations_nsw = hospitalizations.get_hospitalizations_df_nsw()
-
+SHOW_HISTORIC_DAYS = 30
+USE_DATA = [
+    'hospitalizations_nl',
+    'hospitalizations_il',
+    'hospitalizations_nsw',
+    'vaccinations_nl',
+    'vaccinations_il',
+    'vaccinations_nsw',
+    'cases_nl',
+    'cases_il',
+    'cases_nsw'
+]
 
 class CurrentSituation:
-    def __init__(self):
-        False
+    def __init__(self, data):
+        start_date = datetime.today() - timedelta(days=SHOW_HISTORIC_DAYS)
+        self.store_required_data(data, USE_DATA, start_date=start_date)
+        print(self.data['vaccinations_nl'])
+
+    def store_required_data(self, data: dict, keys: list, start_date: datetime):
+        # Data is a dict of df's
+        self.data = {}
+        for k in keys:
+            if start_date:
+                self.data[k] = data[k][data[k]['date'] >= start_date]
+                continue
+            self.data[k] = data[k]
+
 
     def get_html(self):
         return [
@@ -49,7 +58,7 @@ class CurrentSituation:
                                 className="fiveGrid cs_graph",
                                 children=dcc.Graph(id="cs_cases_graph", className="cs_graph", figure={
                                     'data': [
-                                        { 'x': cases_nl['date'], 'y': cases_nl['cases'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '%{x}<br><b>%{y} Cases</b><extra></extra>' }
+                                        { 'x': self.data['cases_nl']['date'], 'y': self.data['cases_nl']['cases'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '<b>%{y} Cases</b><extra></extra>' }
                                     ],
                                     'layout': {
                                         'xaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False },
@@ -58,7 +67,7 @@ class CurrentSituation:
                                         'plot_bgcolor': 'rgba(255, 255, 255, 0)',
                                         'margin': { 'b': 0, 't': 0, 'r': 0, 'l': 0 },
                                         'marker': False,
-                                        'hovermode': 'x',
+                                        'hovermode': 'x unified',
                                         'hoverlabel': {
                                             'bordercolor': 'rgb(229 229 229)',
                                             'bgcolor': 'white',
@@ -75,7 +84,7 @@ class CurrentSituation:
                                     html.Div(
                                         className="counter",
                                         children= [
-                                            html.H5(children= helpers.get_latest_kpi_value(cases_nl, 'cases')),
+                                            html.H5(children= helpers.get_latest_kpi_value(self.data['cases_nl'], 'cases')),
                                             html.P("since yesterday")
                                         ]
                                     )
@@ -83,7 +92,7 @@ class CurrentSituation:
                             ),
                             html.Div(
                                 className="fiveGrid",
-                                children= helpers.get_kpi_trend(cases_nl, 'cases')
+                                children= helpers.get_kpi_trend(self.data['cases_nl'], 'cases')
                             ),
                             html.Div(
                                 className="fiveGrid",
@@ -93,13 +102,13 @@ class CurrentSituation:
                                         children= [
                                             html.Span(children= [
                                                     html.P("Israël:"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(cases_il, 'cases')),
-                                                    helpers.get_kpi_trend_arrow(cases_il, 'cases')
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['cases_il'], 'cases')),
+                                                    helpers.get_kpi_trend_arrow(self.data['cases_il'], 'cases')
                                                 ]),
                                             html.Span(children= [
                                                     html.P("Australia (NSW):"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(cases_nsw, 'cases')),
-                                                    helpers.get_kpi_trend_arrow(cases_nsw, 'cases')
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['cases_nsw'], 'cases')),
+                                                    helpers.get_kpi_trend_arrow(self.data['cases_nsw'], 'cases')
                                                 ]),
                                         ]
                                     )
@@ -117,7 +126,7 @@ class CurrentSituation:
                                 className="fiveGrid cs_graph",
                                 children=dcc.Graph(id="cs_hosp_graph", className="cs_graph", figure={
                                     'data': [
-                                        { 'x': hospitalizations_nl['date'], 'y': hospitalizations_nl['hospitalizations'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '%{x}<br><b>%{y} Cases</b><extra></extra>' }
+                                        { 'x': self.data['hospitalizations_nl']['date'], 'y': self.data['hospitalizations_nl']['hospitalizations'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '<b>%{y} Hospitalizations</b><extra></extra>' }
                                     ],
                                     'layout': {
                                         'xaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False },
@@ -126,7 +135,7 @@ class CurrentSituation:
                                         'plot_bgcolor': 'rgba(255, 255, 255, 0)',
                                         'margin': { 'b': 0, 't': 0, 'r': 0, 'l': 0 },
                                         'marker': False,
-                                        'hovermode': 'x',
+                                        'hovermode': 'x unified',
                                         'hoverlabel': {
                                             'bordercolor': 'rgb(229 229 229)',
                                             'bgcolor': 'white',
@@ -143,7 +152,7 @@ class CurrentSituation:
                                     html.Div(
                                         className="counter",
                                         children= [
-                                            html.H5(children= helpers.get_latest_kpi_value(hospitalizations_nl, 'hospitalizations')),
+                                            html.H5(children= helpers.get_latest_kpi_value(self.data['hospitalizations_nl'], 'hospitalizations')),
                                             html.P("since yesterday")
                                         ]
                                     )
@@ -151,7 +160,7 @@ class CurrentSituation:
                             ),
                             html.Div(
                                 className="fiveGrid",
-                                children= helpers.get_kpi_trend(cases_nl, 'cases')
+                                children= helpers.get_kpi_trend(self.data['cases_nl'], 'cases')
                             ),
                             html.Div(
                                 className="fiveGrid",
@@ -161,13 +170,13 @@ class CurrentSituation:
                                         children= [
                                             html.Span(children= [
                                                     html.P("Israël:"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(hospitalizations_il, 'hospitalizations')),
-                                                    helpers.get_kpi_trend_arrow(hospitalizations_il, 'hospitalizations')
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['hospitalizations_il'], 'hospitalizations')),
+                                                    helpers.get_kpi_trend_arrow(self.data['hospitalizations_il'], 'hospitalizations')
                                                 ]),
                                             html.Span(children= [
                                                     html.P("Australia (NSW):"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(hospitalizations_nsw, 'hospitalizations')),
-                                                    helpers.get_kpi_trend_arrow(hospitalizations_nsw, 'hospitalizations')
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['hospitalizations_nsw'], 'hospitalizations')),
+                                                    helpers.get_kpi_trend_arrow(self.data['hospitalizations_nsw'], 'hospitalizations')
                                                 ]),
                                         ]
                                     )
@@ -185,7 +194,7 @@ class CurrentSituation:
                                 className="fiveGrid cs_graph",
                                 children=dcc.Graph(id="cs_vac_graph", className="cs_graph", figure={
                                     'data': [
-                                        { 'x': vaccinations_nl['date'], 'y': vaccinations_nl['vaccinations'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '%{x}<br><b>%{y} Cases</b><extra></extra>' }
+                                        { 'x': self.data['vaccinations_nl']['date'], 'y': self.data['vaccinations_nl']['vaccinations'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '<b>%{y} Cases</b><extra></extra>' }
                                     ],
                                     'layout': {
                                         'xaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False },
@@ -194,7 +203,7 @@ class CurrentSituation:
                                         'plot_bgcolor': 'rgba(255, 255, 255, 0)',
                                         'margin': { 'b': 0, 't': 0, 'r': 0, 'l': 0 },
                                         'marker': False,
-                                        'hovermode': 'x',
+                                        'hovermode': 'x unified',
                                         'hoverlabel': {
                                             'bordercolor': 'rgb(229 229 229)',
                                             'bgcolor': 'white',
@@ -211,7 +220,7 @@ class CurrentSituation:
                                     html.Div(
                                         className="counter",
                                         children= [
-                                            html.H5(children= helpers.get_latest_kpi_value(vaccinations_nl, 'vaccinations')),
+                                            html.H5(children= helpers.get_latest_kpi_value(self.data['vaccinations_nl'], 'vaccinations')),
                                             html.P("since yesterday")
                                         ]
                                     )
@@ -219,7 +228,7 @@ class CurrentSituation:
                             ),
                             html.Div(
                                 className="fiveGrid",
-                                children= helpers.get_kpi_trend(vaccinations_nl, 'vaccinations')
+                                children= helpers.get_kpi_trend(self.data['vaccinations_nl'], 'vaccinations')
                             ),
                             html.Div(
                                 className="fiveGrid",
@@ -229,13 +238,13 @@ class CurrentSituation:
                                         children= [
                                             html.Span(children= [
                                                     html.P("Israël:"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(vaccinations_il, 'vaccinations')),
-                                                    helpers.get_kpi_trend_arrow(vaccinations_il, 'vaccinations')
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['vaccinations_il'], 'vaccinations')),
+                                                    helpers.get_kpi_trend_arrow(self.data['vaccinations_il'], 'vaccinations')
                                                 ]),
                                             html.Span(children= [
                                                     html.P("Australia (NSW):"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(vaccinations_nsw, 'vaccinations')),
-                                                    helpers.get_kpi_trend_arrow(vaccinations_nsw, 'vaccinations')
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['vaccinations_nsw'], 'vaccinations')),
+                                                    helpers.get_kpi_trend_arrow(self.data['vaccinations_nsw'], 'vaccinations')
                                                 ]),
                                         ]
                                     )
