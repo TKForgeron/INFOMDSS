@@ -53,7 +53,7 @@ class CurrentSituation:
                             ),
                             html.Div(
                                 className="fiveGrid cs_graph",
-                                children=dcc.Graph(id="nl_graph", className="cs_graph", figure={
+                                children=dcc.Graph(id="cs_cases_graph", className="cs_graph", figure={
                                     'data': [
                                         { 'x': cases_nl['date'], 'y': cases_nl['cases'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '%{x}<br><b>%{y} Cases</b><extra></extra>' }
                                     ],
@@ -115,7 +115,70 @@ class CurrentSituation:
                     html.Div(
                         className="situationBox negativeColors",
                         children=[
-                            html.H4('Hospitalisations')
+                            html.Div(
+                                className="fiveGrid",
+                                children= html.H4('Hospitalizations')
+                            ),
+                            html.Div(
+                                className="fiveGrid cs_graph",
+                                children=dcc.Graph(id="cs_hosp_graph", className="cs_graph", figure={
+                                    'data': [
+                                        { 'x': cases_nl['date'], 'y': cases_nl['cases'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '%{x}<br><b>%{y} Cases</b><extra></extra>' }
+                                    ],
+                                    'layout': {
+                                        'xaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False },
+                                        'yaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False, 'automargin': False },
+                                        'autosize': True,
+                                        'plot_bgcolor': 'rgba(255, 255, 255, 0)',
+                                        'margin': { 'b': 0, 't': 0, 'r': 0, 'l': 0 },
+                                        'marker': False,
+                                        'hovermode': 'x',
+                                        'hoverlabel': {
+                                            'bordercolor': 'rgb(229 229 229)',
+                                            'bgcolor': 'white',
+                                            'font': {
+                                                'color': 'black'
+                                            }
+                                        }
+                                    }
+                                }, config={ 'staticPlot': False })
+                            ),
+                            html.Div(
+                                className="fiveGrid",
+                                children= [
+                                    html.Div(
+                                        className="counter",
+                                        children= [
+                                            html.H5(children= helpers.get_latest_kpi_value(cases_nl, 'cases')),
+                                            html.P("since yesterday")
+                                        ]
+                                    )
+                                ]
+                            ),
+                            html.Div(
+                                className="fiveGrid",
+                                children= helpers.get_kpi_trend(cases_nl, 'cases')
+                            ),
+                            html.Div(
+                                className="fiveGrid",
+                                children= [
+                                    html.Div(
+                                        className="compairedCountries",
+                                        children= [
+                                            html.Span(children= [
+                                                    html.P("Israël:"),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(cases_il, 'cases')),
+                                                    helpers.get_kpi_trend_arrow(cases_il, 'cases')
+                                                ]),
+                                            html.Span(children= [
+                                                    html.P("Australia (NSW):"),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(cases_nsw, 'cases')),
+                                                    helpers.get_kpi_trend_arrow(cases_nsw, 'cases')
+                                                ]),
+                                        ]
+                                    )
+                                ]
+                            )
                         ]),
                      html.Div(
                         className="situationBox positiveColors",
