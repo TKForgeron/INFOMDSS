@@ -32,7 +32,7 @@ def get_cases_df_il(start_date: datetime = None) -> pd.DataFrame:
 
     df = df.groupby("date").sum("accumulated_cases").reset_index()
 
-    df["cases"] = df.groupby(["town_code"])["accumulated_cases"].transform(
+    df["cases"] = df["accumulated_cases"].transform(
         lambda s: s.sub(s.shift().fillna(0)).abs()
     )
 
@@ -65,7 +65,6 @@ def get_cases_df_nsw(start_date: datetime = None) -> pd.DataFrame:
         endpoint = "https://data.nsw.gov.au/data/api/3/action/datastore_search?resource_id=24b34cb5-8b01-4008-9d93-d14cf5518aec&limit=1000000"
         response = requests.get(endpoint)
         records = json.loads(response.content)["result"]["records"]
-        print(records)
         df = pd.DataFrame(records)
     except:
         df = pd.read_csv("data/NSW/confirmed_cases_table2_age_group_DS6.csv")
@@ -123,6 +122,3 @@ def get_cases_df_nl(start_date: datetime = None) -> pd.DataFrame:
     df = df[["date", "cases", "cases_per_100k"]]
 
     return df
-
-
-get_cases_df_nsw()

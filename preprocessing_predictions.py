@@ -88,6 +88,8 @@ def get_prediction_data() -> pd.DataFrame:
     # df = df.drop("date", axis=1)
     df = df.sort_values(by="date").set_index("date")
 
+    # all predictor variables: ["deaths", "cases", "hospitalizations", "vaccination_coverage", "temp"]
+
     return df
 
 
