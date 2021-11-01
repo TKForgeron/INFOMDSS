@@ -9,8 +9,6 @@ import cases
 import vaccinations
 import helpers
 
-app = dash.Dash(__name__)
-
 cases_il = pd.read_csv("data/Israel/cases/geographic-sum-per-day-ver_00536_DS4.csv")
 cases_il = cases.get_cases_df_il(cases_il, months=1)
 
@@ -54,8 +52,28 @@ class CurrentSituation:
                                 children= html.H4('Cases')
                             ),
                             html.Div(
-                                className="fiveGrid",
-                                children= html.H4('Graph')
+                                className="fiveGrid cs_graph",
+                                children=dcc.Graph(id="nl_graph", className="cs_graph", figure={
+                                    'data': [
+                                        { 'x': cases_nl['date'], 'y': cases_nl['cases'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '%{x}<br><b>%{y} Cases</b><extra></extra>' }
+                                    ],
+                                    'layout': {
+                                        'xaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False },
+                                        'yaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False, 'automargin': False },
+                                        'autosize': True,
+                                        'plot_bgcolor': 'rgba(255, 255, 255, 0)',
+                                        'margin': { 'b': 0, 't': 0, 'r': 0, 'l': 0 },
+                                        'marker': False,
+                                        'hovermode': 'x',
+                                        'hoverlabel': {
+                                            'bordercolor': 'rgb(229 229 229)',
+                                            'bgcolor': 'white',
+                                            'font': {
+                                                'color': 'black'
+                                            }
+                                        }
+                                    }
+                                }, config={ 'staticPlot': False })
                             ),
                             html.Div(
                                 className="fiveGrid",
