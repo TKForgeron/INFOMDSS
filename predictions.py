@@ -18,7 +18,7 @@ import preprocessing_predictions as prep
 # Loading the data
 df = prep.get_prediction_data()
 
-folds = KFold()
+folds = KFold(n_splits=5, shuffle=True, random_state=32)
 
 x_train = df[["deaths", "cases", "hospitalizations", "vaccination_coverage", "temp"]]
 y_train = df["StringencyIndexForDisplay"]
@@ -32,8 +32,6 @@ print("Accuracy linear regression:", mean(scores_linear))
 scores_logistic = cross_val_score(LogisticRegression(), x_train, y_train, cv=folds)
 print("Accuracy logistic:", mean(scores_logistic))
 
-scores_rf = cross_val_score(RandomForestClassifier(), x_train, y_train, cv=folds)
-print("Accuracy random forest:", mean(scores_rf))
 
 random_forest_regressor = RandomForestRegressor(
     n_jobs=-1,
