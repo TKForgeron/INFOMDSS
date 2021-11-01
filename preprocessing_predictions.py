@@ -25,7 +25,7 @@ def get_prediction_data() -> pd.DataFrame:
     hospitalizations_nl = h.get_hospitalizations_df_nl()
     hospitalizations_nsw = h.get_hospitalizations_df_nsw()
 
-    stringency_columns = ["date", "StringencyIndexForDisplay", "deaths"]
+    stringency_columns = ["date", "StringencyIndexForDisplay", "deaths", "CountryName"]
     df_measures = m.get_measures_df_il_nl_nsw()
     unique_country_dfs = m.split_measures_df_into_countries(df_measures)
     stringency_deaths_nsw = unique_country_dfs[0][stringency_columns]

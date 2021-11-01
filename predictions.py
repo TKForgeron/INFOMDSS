@@ -10,7 +10,7 @@ from sklearn.model_selection import (
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeClassifier
 
 import preprocessing_predictions as prep
@@ -34,3 +34,12 @@ print("Accuracy logistic:", mean(scores_logistic))
 
 scores_rf = cross_val_score(RandomForestClassifier(), x_train, y_train, cv=folds)
 print("Accuracy random forest:", mean(scores_rf))
+
+random_forest_regressor = RandomForestRegressor(
+    n_jobs=-1,
+    n_estimators=12,
+    min_samples_split=5,
+    max_depth=21,
+    max_features="log2",
+    criterion="absolute_error",
+)
