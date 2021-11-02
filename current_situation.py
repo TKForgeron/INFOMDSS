@@ -7,7 +7,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import helpers
 from website_component import Website_Component
-SHOW_HISTORIC_DAYS = 30
+SHOW_HISTORIC_DAYS = 90
 USE_DATA = [
     'hospitalizations_nl',
     'hospitalizations_il',

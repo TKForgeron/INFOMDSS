@@ -5,6 +5,7 @@ from dash import html
 import plotly.express as px
 import pandas as pd
 import numpy as np
+from dash.dependencies import Input, Output
 from datetime import datetime, timedelta
 import helpers
 from website_component import Website_Component
@@ -16,19 +17,25 @@ USE_DATA = [
 ]
 
 class Cases_Overview(Website_Component):
-    def __init__(self, data):
+    def __init__(self, data, app):
         self.store_required_data(data, USE_DATA)
+        self.app = app
         self.df = self.create_cases_measures_df()
         self.df_colors = self.get_colors_pallete(self.df, 'strictness', 5)
+        app.callback(Output('ov_cases_graph', 'figure'), [Input('dropdown', 'value')])(self.on_dropdown_change)
 
     def get_html(self):
-        print('000')
-        print(self.df_colors)
+        # print('000')
+        # print(self.df_colors)
         fig = px.line(self.df, x="date", y="cases", color="seq", color_discrete_sequence=self.df_colors)
         return [
             html.Div(
                 className="container",
                 children=[
+                    dcc.Dropdown(id='dropdown', options=[
+                    {'label': 'A', 'value': 'A'},
+                    {'label': 'B', 'value': 'B'}],
+                    value = 'A'),
                     dcc.Graph(id="ov_cases_graph", figure=fig)
 
             ]
@@ -60,7 +67,7 @@ class Cases_Overview(Website_Component):
         # merged.loc[merged['keep'] == True, ['date']] = pd.DatetimeIndex(merged[merged['keep'] == True]['date']) + pd.DateOffset(1)
         # merged.loc[merged['keep'] == True, ['seq']] = merged[merged['keep'] == True]['seq'] + 1
         merged["date"] = pd.to_datetime(merged["date"])
-        print(merged[merged.duplicated(subset=['date'], keep=False)])
+        # print(merged[merged.duplicated(subset=['date'], keep=False)])
         merged = merged.sort_values(['date', 'seq'], ascending=(True, False))
         merged.to_csv('test.csv')
         # print(merged)
@@ -79,7 +86,7 @@ class Cases_Overview(Website_Component):
         for n in range(0, levels):
             color_pallete.append((start_color + (n / (levels - 1) * vector)).astype(int))
 
-        print(color_pallete)
+        # print(color_pallete)
         seq = 1
         pallete = []
         while True:
@@ -87,8 +94,12 @@ class Cases_Overview(Website_Component):
             if (len(filtered) == 0): break
             level = filtered[col].tail(1).values[0]
             color = color_pallete[int(level)] # in rgb as np.array
-            print(filtered.tail(1))
-            print(int(level))
+            # print(filtered.tail(1))
+            # print(int(level))
             pallete.append('#%02x%02x%02x' % (color[0], color[1], color[2])) # to hex
             seq += 1
         return pallete
+
+    def on_dropdown_change(self, value):
+        print(value)
+
