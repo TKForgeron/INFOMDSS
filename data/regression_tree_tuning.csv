@@ -1,0 +1,22 @@
+rank_test_score;params;mean_test_score;std_test_score
+1;{'criterion': 'absolute_error', 'max_depth': 20, 'splitter': 'best'};-1.542319739872646;0.5188719576256893
+2;{'criterion': 'absolute_error', 'max_depth': 29, 'splitter': 'best'};-1.5956032041728765;0.4996481624592939
+3;{'criterion': 'absolute_error', 'max_depth': 30, 'splitter': 'best'};-1.5982712369597618;0.4977149149151483
+4;{'criterion': 'absolute_error', 'max_depth': 19, 'splitter': 'best'};-1.6020036580409158;0.48650839899770165
+5;{'criterion': 'absolute_error', 'max_depth': 28, 'splitter': 'best'};-1.6028204172876304;0.4946999086411312
+6;{'criterion': 'absolute_error', 'max_depth': 22, 'splitter': 'best'};-1.604330646253895;0.48848373667008965
+7;{'criterion': 'absolute_error', 'max_depth': 27, 'splitter': 'best'};-1.607402994174231;0.48822914668364925
+8;{'criterion': 'absolute_error', 'max_depth': 25, 'splitter': 'best'};-1.6074739872645984;0.4826818925951653
+9;{'criterion': 'absolute_error', 'max_depth': 21, 'splitter': 'best'};-1.6128587589757486;0.4830150515992706
+10;{'criterion': 'absolute_error', 'max_depth': 36, 'splitter': 'best'};-1.6227588402655466;0.4810842178097681
+10;{'criterion': 'absolute_error', 'max_depth': 35, 'splitter': 'best'};-1.6227588402655466;0.4810842178097681
+10;{'criterion': 'absolute_error', 'max_depth': 34, 'splitter': 'best'};-1.6227588402655466;0.4810842178097681
+10;{'criterion': 'absolute_error', 'max_depth': 33, 'splitter': 'best'};-1.6227588402655466;0.4810842178097681
+10;{'criterion': 'absolute_error', 'max_depth': 32, 'splitter': 'best'};-1.6227588402655466;0.4810842178097681
+10;{'criterion': 'absolute_error', 'max_depth': None, 'splitter': 'best'};-1.6227588402655466;0.4810842178097681
+10;{'criterion': 'absolute_error', 'max_depth': 37, 'splitter': 'best'};-1.6227588402655466;0.4810842178097681
+10;{'criterion': 'absolute_error', 'max_depth': 31, 'splitter': 'best'};-1.6227588402655466;0.4810842178097681
+18;{'criterion': 'absolute_error', 'max_depth': 18, 'splitter': 'best'};-1.6319255520932123;0.5223402941042945
+19;{'criterion': 'absolute_error', 'max_depth': 26, 'splitter': 'best'};-1.644775775640157;0.46350871582384434
+20;{'criterion': 'absolute_error', 'max_depth': 24, 'splitter': 'best'};-1.6486539764259587;0.4689004227849656
+21;{'criterion': 'absolute_error', 'max_depth': 23, 'splitter': 'best'};-1.6630304836742986;0.4535749270148205

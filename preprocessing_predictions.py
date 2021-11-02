@@ -39,12 +39,12 @@ def get_prediction_data() -> pd.DataFrame:
     cases_stringe_deaths_hosp_il = pd.merge(
         cases_stringency_deaths_il, hospitalizations_il, how="inner", on="date"
     )
-    cases_stringe_hosp_deaths_vacc_il = pd.merge(
-        cases_stringe_deaths_hosp_il, vaccinations_il, how="inner", on="date"
+    cases_stringe_hosp_deaths_temp_il = pd.merge(
+        cases_stringe_deaths_hosp_il, temperatures_il, how="inner", on="date"
     )
-    cases_stringe_hosp_deaths_vacc_temp_il = pd.merge(
-        cases_stringe_hosp_deaths_vacc_il, temperatures_il, how="inner", on="date"
-    )
+    # cases_stringe_hosp_deaths_temp_vacc_il = pd.merge(
+    #     cases_stringe_hosp_deaths_temp_il, vaccinations_il, how="inner", on="date"
+    # )
 
     # NETHERLANDS merging cases, deaths, hospitalizations, and stringencyIndex on date
     cases_stringency_deaths_nl = pd.merge(
@@ -53,12 +53,12 @@ def get_prediction_data() -> pd.DataFrame:
     cases_stringe_deaths_hosp_nl = pd.merge(
         cases_stringency_deaths_nl, hospitalizations_nl, how="inner", on="date"
     )
-    cases_stringe_hosp_deaths_vacc_nl = pd.merge(
-        cases_stringe_deaths_hosp_nl, vaccinations_nl, how="inner", on="date"
+    cases_stringe_hosp_deaths_temp_nl = pd.merge(
+        cases_stringe_deaths_hosp_nl, temperatures_nl, how="inner", on="date"
     )
-    cases_stringe_hosp_deaths_vacc_temp_nl = pd.merge(
-        cases_stringe_hosp_deaths_vacc_nl, temperatures_nl, how="inner", on="date"
-    )
+    # cases_stringe_hosp_deaths_temp_vacc_nl = pd.merge(
+    #     cases_stringe_hosp_deaths_temp_nl, vaccinations_nl, how="inner", on="date"
+    # )
 
     # NEW SOUTH WALES merging cases, deaths, hospitalizations, and stringencyIndex on date
     cases_stringency_deaths_nsw = pd.merge(
@@ -67,30 +67,30 @@ def get_prediction_data() -> pd.DataFrame:
     cases_stringe_deaths_hosp_nsw = pd.merge(
         cases_stringency_deaths_nsw, hospitalizations_nsw, how="inner", on="date"
     )
-    cases_stringe_hosp_deaths_vacc_nsw = pd.merge(
-        cases_stringe_deaths_hosp_nsw, vaccinations_nsw, how="inner", on="date"
+    cases_stringe_hosp_deaths_temp_nsw = pd.merge(
+        cases_stringe_deaths_hosp_nsw, temperatures_nsw, how="inner", on="date"
     )
-    cases_stringe_hosp_deaths_vacc_temp_nsw = pd.merge(
-        cases_stringe_hosp_deaths_vacc_nsw, temperatures_nsw, how="inner", on="date"
-    )
+    # cases_stringe_hosp_deaths_temp_vacc_nsw = pd.merge(
+    #     cases_stringe_hosp_deaths_temp_nsw, vaccinations_nsw, how="inner", on="date"
+    # )
 
     # concatenating IL, NL, NSW to one dataframe
-    cases_stringe_hosp_deaths_vacc_temp = pd.concat(
+    predictors = pd.concat(
         [
-            cases_stringe_hosp_deaths_vacc_temp_il,
-            cases_stringe_hosp_deaths_vacc_temp_nl,
-            cases_stringe_hosp_deaths_vacc_temp_nsw,
+            cases_stringe_hosp_deaths_temp_il,
+            cases_stringe_hosp_deaths_temp_nl,
+            cases_stringe_hosp_deaths_temp_nsw,
         ]
     )
 
     # drop all rows where NaN is present
-    df = cases_stringe_hosp_deaths_vacc_temp.dropna()
+    predictors = predictors.dropna()
     # df = df.drop("date", axis=1)
-    df = df.sort_values(by="date").set_index("date")
+    predictors = predictors.sort_values(by="date").set_index("date")
 
     # all predictor variables: ["deaths", "cases", "hospitalizations", "vaccination_coverage", "temp"]
 
-    return df
+    return predictors
 
 
 def get_measures_data() -> pd.DataFrame:
