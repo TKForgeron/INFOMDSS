@@ -173,3 +173,20 @@ h2 {
 .cs_graph .cs_graph_hover {
   padding: 3px;
 }
+
+.ledgend_color {
+  width: 70px;
+  height: 20px;
+  display: inline-block;
+}
+.ledgend_label {
+  margin-left: 20px;
+  display: inline-block;
+  margin-top: 2px;
+}
+.ov_cases_splitted_graph {
+  width: calc(50% - 20px);
+  background-color: #ebeef5;
+  display: inline-block;
+}
+
