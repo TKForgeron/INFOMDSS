@@ -42,7 +42,7 @@ def get_vaccinations_df_il(start_date: datetime = None) -> pd.DataFrame:
     df[vaccination_columns] = (
         df[vaccination_columns].replace(to_replace="<15", value="0").astype(float)
     )
- 
+
     df["accumulated_vaccinations"] = df[vaccination_columns].sum(axis=1)
 
     df = df.groupby("date")["accumulated_vaccinations"].sum().reset_index()
@@ -52,8 +52,13 @@ def get_vaccinations_df_il(start_date: datetime = None) -> pd.DataFrame:
     )
 
     df["date"] = pd.to_datetime(df["date"])
-    df['date'] = df['date'].dt.isocalendar().year.astype(str) + "-W" + df['date'].dt.isocalendar().week.astype(str) + "-1"
-    df['date'] = pd.to_datetime(df['date'], format='%G-W%V-%u')
+    df["date"] = (
+        df["date"].dt.isocalendar().year.astype(str)
+        + "-W"
+        + df["date"].dt.isocalendar().week.astype(str)
+        + "-1"
+    )
+    df["date"] = pd.to_datetime(df["date"], format="%G-W%V-%u")
 
     df = df.groupby("date")["vaccinations"].sum().reset_index()
 
@@ -104,9 +109,7 @@ def get_vaccinations_df_nl(start_date: datetime = None) -> pd.DataFrame:
             * 0.01
         )
 
-    df["vaccinations"] = (
-        df.drop("date", axis=1).sum(axis=1) 
-    )
+    df["vaccinations"] = df.drop("date", axis=1).sum(axis=1)
 
     df["vaccinations"] = df["vaccinations"].transform(
         lambda s: s.sub(s.shift().fillna(0)).abs()
@@ -124,10 +127,15 @@ def get_vaccinations_df_nsw(start_date: datetime = None) -> pd.DataFrame:
     last_monday = datetime.strptime(year_week + "-1", "%Y-W%W-%w")
 
     date_string = last_monday.strftime("%d-%B-%Y").lower()
-    date_month = str(last_monday.month).zfill(2)
+    date_month = str(last_monday.month)
 
-    path = f"https://www.health.gov.au/sites/default/files/documents/2021/{date_month}/covid-19-vaccination-geographic-vaccination-rates-sa3-{date_string}.xlsx"
-    df = pd.read_excel(path, usecols=[0, 2, 4])
+    try:
+        path = f"https://www.health.gov.au/sites/default/files/documents/2021/{date_month}/covid-19-vaccination-geographic-vaccination-rates-sa3-{date_string}.xlsx"
+        df = pd.read_excel(path, usecols=[0, 2, 4])
+    except:
+        path = "data/NSW/covid-19-vaccination-geographic-vaccination-rates-sa3-1-november-2021.xlsx"
+        df = pd.read_excel(path, usecols=[0, 2, 4])
+
     df = df[df[df.columns[0]] == "New South Wales"]
     df["date"] = last_monday
     df.columns = ["state", "population", "vaccination_coverage", "date"]
