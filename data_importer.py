@@ -1,6 +1,7 @@
 import cases
 import vaccinations
 import hospitalizations
+import measures
 import sys
 import time
 import os
@@ -43,7 +44,12 @@ class Data_Importer:
         self.update_progress(80)
         self.data['hospitalizations_nsw'] = hospitalizations.get_hospitalizations_df_nsw()
 
+        self.update_progress(90)
+        self.data['measures'] = measures.get_measures_df_il_nl_nsw()
+        self.update_progress(100)
+
         self.write_cache()
+        self.overwrite_cache = False
         return self.data
 
     def check_cache(self):

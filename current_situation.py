@@ -6,7 +6,7 @@ import plotly.express as px
 import pandas as pd
 from datetime import datetime, timedelta
 import helpers
-
+from website_component import Website_Component
 SHOW_HISTORIC_DAYS = 30
 USE_DATA = [
     'hospitalizations_nl',
@@ -20,21 +20,10 @@ USE_DATA = [
     'cases_nsw'
 ]
 
-class CurrentSituation:
+class CurrentSituation(Website_Component):
     def __init__(self, data):
         start_date = datetime.today() - timedelta(days=SHOW_HISTORIC_DAYS)
         self.store_required_data(data, USE_DATA, start_date=start_date)
-        print(self.data['vaccinations_nl'])
-
-    def store_required_data(self, data: dict, keys: list, start_date: datetime):
-        # Data is a dict of df's
-        self.data = {}
-        for k in keys:
-            if start_date:
-                self.data[k] = data[k][data[k]['date'] >= start_date]
-                continue
-            self.data[k] = data[k]
-
 
     def get_html(self):
         return [
