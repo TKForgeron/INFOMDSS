@@ -146,10 +146,16 @@ def get_hospitalizations_df_nsw(start_date: datetime = None) -> pd.DataFrame:
 
     df = df[["Date", "NSW"]]
     df = df.rename(columns={"Date": "date", "NSW": "hospitalizations"})
-    df["hospitalizations"] = df["hospitalizations"].apply(
-        lambda x: x.translate(str.maketrans("", "", "!@#$,"))
-    )
-    df["hospitalizations"] = df["hospitalizations"].astype(int)
+    try:
+        df["hospitalizations"] = (
+            df["hospitalizations"]
+            .dropna()
+            .apply(lambda x: x.translate(str.maketrans("", "", "!@#$,")))
+        )
+    except:
+        df["hospitalizations"] = df["hospitalizations"].dropna()
+
+    df["hospitalizations"] = df["hospitalizations"].dropna().astype(int)
 
     if start_date:
         df = df[df["date"] >= start_date]
