@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import pandas as pd
 
 import measures as m
@@ -85,6 +86,7 @@ def get_prediction_train_data() -> pd.DataFrame:
             cases_stringe_hosp_deaths_temp_nsw.shape[0],
         ]
     )
+
     # concatenating IL, NL, NSW to one dataframe
     predictors = pd.concat(
         [
@@ -131,6 +133,14 @@ def get_data_to_predict_on():
     mean_latest_week = pd.DataFrame(latest_week.mean(axis=0)).T
 
     return mean_latest_week
+
+
+def get_latest_stringency_nl():
+    df = m.get_measures_df(datetime.now() - timedelta(days=20))
+    df = df[df["CountryCode"] == "NLD"]
+    latest_stringency_nl = df["StringencyIndexForDisplay"].values[-1]
+
+    return latest_stringency_nl
 
 
 def get_measures_data() -> pd.DataFrame:

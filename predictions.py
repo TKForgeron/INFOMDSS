@@ -12,7 +12,8 @@ import preprocessing_predictions as prep
 
 
 def predict_stringency_index() -> dict:
-    # Loading the data
+
+    print("Loading prediction data")
     df = prep.get_prediction_train_data()
     x_train = df[["deaths", "cases", "hospitalizations", "temp"]]  # , 'vaccinations']]
     y_train = df["StringencyIndexForDisplay"]
@@ -25,19 +26,21 @@ def predict_stringency_index() -> dict:
     regressor = DecisionTreeRegressor(
         criterion="absolute_error", max_depth=20, random_state=32
     )
+
     print("fitting regression tree...")
     regressor.fit(x_train, y_train)
 
     prediction_data = prep.get_data_to_predict_on()
-    stringency_nl_now = prediction_data["StringencyIndexForDisplay"].values[0]
+    stringency_nl_now = prep.get_latest_stringency_nl()
     prediction_data = prediction_data.iloc[:, -4:]
 
-    print("now predicting on:", prediction_data)
+    print("now predicting on: \n", prediction_data)
     stringency_prediction = regressor.predict(prediction_data)
-    print(stringency_prediction)
+    stringency_prediction = stringency_prediction[0]
+
     return {
         "stringency_nl_now": stringency_nl_now,
-        "stringency_prediction": stringency_nl_now,
+        "stringency_prediction": stringency_prediction,
     }
 
 
