@@ -159,12 +159,8 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
         # fig = px.line(self.df_temperature, x="date", y="cases", color="seq", color_discrete_sequence=self.df_temperature_colors, hover_data=['temp'])
 
         fig_il = px.line(self.dfs['il'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['il']['C1_School closing'], hover_data=['C1_School closing_hd'])
-<<<<<<< HEAD
-        fig_il.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
-=======
         fig_il.update_layout(showlegend=False)
         fig_il.update_layout(margin=dict(r=0, t=0, l=20, b=20))
->>>>>>> 028c90bd68c72d2913fe242e596845a8622ed4c3
 
         fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nsw']['C1_School closing'], hover_data=['C1_School closing_hd'])
         fig_nsw.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
