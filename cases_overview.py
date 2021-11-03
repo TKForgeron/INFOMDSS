@@ -177,7 +177,7 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
                         ]),
                     dcc.Dropdown(id='dropdown', options=dropdown_options,
                     value=dropdown_options[0]['value']),
-                    html.div(
+                    html.Div(
                         className="co_main",
                         children=[
                             dcc.Graph(id="ov_cases_graph", className="co_main_graph", figure=fig),
