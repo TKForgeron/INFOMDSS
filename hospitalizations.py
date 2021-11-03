@@ -36,7 +36,6 @@ def get_hospitalizations_df_il(start_date: datetime = None) -> pd.DataFrame:
         .astype(int)
     )
 
-
     df = df.groupby("date").sum("accumulated_hospitalized").reset_index()
     df["hospitalizations"] = df["accumulated_hospitalized"].transform(
         lambda s: s.sub(s.shift().fillna(0)).abs()
@@ -71,7 +70,10 @@ def get_hospitalizations_df_nl(start_date: datetime = None) -> pd.DataFrame:
 
     """
     try:
-        df = pd.read_csv('https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv',sep=';')
+        df = pd.read_csv(
+            "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv",
+            sep=";",
+        )
     except:
         df = pd.read_csv(
             "data/Netherlands/COVID-19_aantallen_gemeente_per_dag.csv", sep=";"
@@ -154,6 +156,16 @@ def get_hospitalizations_df_nsw(start_date: datetime = None) -> pd.DataFrame:
 
     df = df[["Date", "NSW"]]
     df = df.rename(columns={"Date": "date", "NSW": "hospitalizations"})
+    try:
+        df["hospitalizations"] = (
+            df["hospitalizations"]
+            .dropna()
+            .apply(lambda x: x.translate(str.maketrans("", "", "!@#$,")))
+        )
+    except:
+        df["hospitalizations"] = df["hospitalizations"].dropna()
+
+    df["hospitalizations"] = df["hospitalizations"].dropna().astype(int)
 
     if start_date:
         df = df[df["date"] >= start_date]
@@ -170,5 +182,3 @@ def get_hospitalizations_df_nsw(start_date: datetime = None) -> pd.DataFrame:
     df = df[["date", "hospitalizations", "hospitalizations_per_100k"]]
 
     return df
-
-
