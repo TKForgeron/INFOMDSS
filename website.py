@@ -2,6 +2,7 @@ import dash
 from header import Header
 from current_situation import CurrentSituation
 from cases_overview import Cases_Overview
+from vaccinations_agegroup import Vaccinations_AgeGroup
 from dash import dcc
 from dash import html
 import sys
@@ -29,6 +30,7 @@ class Website:
         cases_overview = Cases_Overview(self.data, self.app)
         callbacks = callbacks + cases_overview.get_callbacks()
         allHtml = allHtml + cases_overview.get_html()
+        allHtml = allHtml + Vaccinations_AgeGroup(self.data).get_html()
         self.callbacks = callbacks
         self.html = html.Div(
             className="pageContainer",

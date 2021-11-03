@@ -15,7 +15,7 @@ class Data_Importer:
         self.data = {}
         self.overwrite_cache = no_cache
         self.progress = 0
-        self.max_progress = 14
+        self.max_progress = 15
     
     def get_data(self):
         loaded_from_cache = self.check_cache()
@@ -40,6 +40,9 @@ class Data_Importer:
         self.data['vaccinations_il'] = vaccinations.get_vaccinations_df_il()
         self.update_progress()
         self.data['vaccinations_nsw'] = vaccinations.get_vaccinations_df_nsw()
+    
+        self.update_progress()
+        self.data['vaccinations_agegroup_nl'] = vaccinations.get_vaccinations_per_age_group_nl()
 
         self.update_progress()
         self.data['hospitalizations_nl'] = hospitalizations.get_hospitalizations_df_nl()

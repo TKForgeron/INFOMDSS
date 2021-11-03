@@ -40,7 +40,7 @@ h2 {
 }
 .titleBar {
   width: 100%;
-  display: inline-block;
+  display: flex;
   margin-bottom: 20px;
 }
 .titleBar h3 {
@@ -49,12 +49,14 @@ h2 {
   font-size: 20px;
   color: #00C678;
   margin: 0px;
+  flex: none;
 }
 .titleBar hr {
   float: right;
-  width: calc(100% - 180px);
+  width: 100%;
   border: none;
   height: 2px;
+  margin-left: 10px;
   margin-top: 16px;
   color: #00C678;
   background-color: #00C678;
@@ -172,6 +174,9 @@ h2 {
 
 .cs_graph .cs_graph_hover {
   padding: 3px;
+}
+.situationBox .js-line {
+  stroke: #006EFE !important;
 }
 
 .ledgend_color {
