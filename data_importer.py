@@ -3,6 +3,7 @@ import vaccinations
 import hospitalizations
 import measures
 import temperature
+import predictions
 import sys
 import time
 import os
@@ -15,7 +16,7 @@ class Data_Importer:
         self.data = {}
         self.overwrite_cache = no_cache
         self.progress = 0
-        self.max_progress = 15
+        self.max_progress = 25
     
     def get_data(self):
         loaded_from_cache = self.check_cache()
@@ -26,6 +27,7 @@ class Data_Importer:
                 print('Loaded data succesfully from cache')
                 return self.data
             print('Unable to load data from cache, downloading new!')
+        start_time = time.time()
         self.update_progress()
         self.data['cases_nl'] = cases.get_cases_df_nl()
         self.update_progress()
@@ -60,7 +62,12 @@ class Data_Importer:
         self.update_progress()
         self.data['temperature_il'] = temperature.get_temperatures_df_il()
         self.update_progress()
+        self.data['prediction'] = predictions.predict_stringency_index(self.update_progress)
+        self.update_progress()
+        end_time = time.time()
+        print('Finished!')
 
+        print('Data preperation completed in ' + str(round(end_time - start_time, 1))  + 's')
         self.write_cache()
         self.overwrite_cache = False
         return self.data
