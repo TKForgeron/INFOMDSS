@@ -175,12 +175,17 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
                         ]),
                     dcc.Dropdown(id='dropdown', options=dropdown_options,
                     value=dropdown_options[0]['value']),
-                    dcc.Graph(id="ov_cases_graph", figure=fig),
-                    html.Div(
-                        id="co_ledgend",
-                        className="ledgend",
-                        children=
-                           self.create_ledgend(self.keys[0]['legend_items'], self.colors_list['nl'][self.keys[0]['key_name']])
+                    html.div(
+                        className="co_main",
+                        children=[
+                            dcc.Graph(id="ov_cases_graph", className="co_main_graph", figure=fig),
+                        html.Div(
+                            id="co_ledgend",
+                            className="ledgend",
+                            children=
+                            self.create_ledgend(self.keys[0]['legend_items'], self.colors_list['nl'][self.keys[0]['key_name']])
+                        )]
+                    
  
                     ),
                     html.Div(
@@ -290,19 +295,26 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
 
         return pallete, color_pallete
 
+    def style_fig(self, fig):
+        fig.update_layout(showlegend=False)
+        fig.update_layout(margin=dict(r=20, t=0, l=20, b=20), paper_bgcolor='rgb(251, 251, 251)', plot_bgcolor='rgb(251, 251, 251)')
+        fig.update_xaxes(gridcolor='rgb(217, 217, 217)')
+        fig.update_yaxes(gridcolor='rgb(217, 217, 217)')
+
+
     def on_dropdown_change(self, value):
         fig = px.line(self.dfs['nl'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nl'][value], hover_data=[value + '_hd'])
-        fig.update_layout(showlegend=False)
+        self.style_fig(fig)
 
         fig_il = px.line(self.dfs['il'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['il'][value], hover_data=[value + '_hd'])
-        fig_il.update_layout(showlegend=False)
-        fig_il.update_layout(margin=dict(r=20, t=0, l=20, b=20), paper_bgcolor='rgb(251, 251, 251)', plot_bgcolor='rgb(251, 251, 251)')
+        self.style_fig(fig_il)
+
         # print(self.colors['il'])
 
 
         fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nsw'][value], hover_data=[value + '_hd'])
-        fig_nsw.update_layout(showlegend=False)
-        fig_nsw.update_layout(margin=dict(r=20, t=0, l=20, b=20), paper_bgcolor='rgb(251, 251, 251)', plot_bgcolor='rgb(251, 251, 251)')
+        self.style_fig(fig_nsw)
+
         # if value == 'temp':
         # elif value == 'none':
         #     fig = px.line(self.data['cases_nl'], x="date", y="cases")
