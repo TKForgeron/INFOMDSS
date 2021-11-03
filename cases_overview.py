@@ -314,7 +314,6 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
         fig.update_xaxes(gridcolor='rgb(217, 217, 217)')
         fig.update_yaxes(gridcolor='rgb(217, 217, 217)')
 
-
     def on_dropdown_change(self, value):
         fig = px.line(self.dfs['nl'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nl'][value], hover_data=[value + '_hd'])
         self.style_fig(fig)
