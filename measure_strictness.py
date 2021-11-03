@@ -6,17 +6,27 @@ import plotly.express as px
 import pandas as pd
 from datetime import datetime, timedelta
 import helpers
+import colors
 from website_component import Website_Component
 USE_DATA = [
     'measures',
+    'prediction'
 ]
 
 class Measure_Strictness(Website_Component):
     def __init__(self, data):
         self.store_required_data(data, USE_DATA, start_date=None)
+        self.levels = 10
+        self.get_prediction_vars()
+
+    def get_prediction_vars(self):
+        prediction = self.data['prediction']
+        print(prediction)
+        self.cur_level = round(prediction['stringency_nl_now'].values[0] / 100 * self.levels)
+        self.predicted_level = round(prediction['stringency_prediction'].values[0] / 100 * self.levels)
 
     def get_html(self):
-        self.data['measures'].to_csv('test_i.csv')
+        self.data['prediction'].to_csv('test_i.csv')
         fig = px.line(self.data['measures'], x="date", y="StringencyIndex", color="CountryName")
         return [
             html.Div(
@@ -34,6 +44,89 @@ class Measure_Strictness(Website_Component):
                         children=[
                             dcc.Graph(id="ms_strictness_graph", figure=fig)
                         ]
+                    ),
+                    html.Div(
+                        className="ms_strictness_container",
+                        children=[
+                            html.Div(
+                                className="ms_strictness_left",
+                                children=[
+                                    html.Div(
+                                        className="ms_strictness_current",
+                                        children=[
+                                            html.Div(
+                                                className="ms_strictness_label",
+                                                children='Current strictness'
+                                            ),
+                                            html.Div(
+                                                className="ms_strictness_label",
+                                                children=str(self.cur_level)
+                                            )
+                                        ]
+                                    ),
+                                    html.Div(
+                                        className="ms_strictness_predicted",
+                                        children=[
+                                            html.Div(
+                                                className="ms_strictness_label",
+                                                children='Predicted strictness'
+                                            ),
+                                            html.Div(
+                                                className="ms_strictness_label",
+                                                children=str(self.predicted_level)
+                                            )
+                                        ]
+                                    ),
+                                    html.Div(
+                                        className="ms_bar",
+                                        children=self.create_color_bar()
+                                    )
+                                ]
+                            ),
+
+                        ]
                     )
                 ])    
         ]
+
+    def create_color_bar(self):
+        color_list = colors.create_color_list(self.levels)
+        html_list = []
+        for i, c in enumerate(color_list):
+            cur_el = []
+            top_childs = []
+            if i == self.cur_level:
+                top_childs.append(
+                    html.I(className="ms_bar_cur_arrow")
+                )
+            cur_el.append(
+                html.Div(
+                    className="ms_bar_cur_arrow_container",
+                    children=top_childs
+                )
+            )
+            cur_el.append(
+                html.Div(
+                    className="ms_bar_part_bar",
+                    style={ 'backgroundColor': c }
+                )
+            )
+            bottom_childs = []
+            if (i == self.predicted_level):
+                bottom_childs.append(
+                    html.I(className="ms_bar_pred_arrow")
+                )
+            cur_el.append(
+                html.Div(
+                    className="ms_bar_pred_arrow_container",
+                    children=bottom_childs
+                )
+            )
+            html_list.append(
+                html.Div(
+                    className="ms_bar_part",
+                    children=cur_el
+                )
+            )
+        return html_list
+

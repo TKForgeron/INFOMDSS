@@ -51,6 +51,13 @@ h2 {
   margin: 0px;
   flex: none;
 }
+h4 {
+  font-weight: 400;
+  font-size: 18px;
+  color: #00C678;
+  margin: 0;
+  margin-bottom: 10px;
+}
 .titleBar hr {
   float: right;
   width: 100%;
@@ -179,21 +186,6 @@ h2 {
   stroke: #006EFE !important;
 }
 
-.ledgend_color {
-  width: 70px;
-  height: 20px;
-  display: inline-block;
-}
-.ledgend_label {
-  margin-left: 20px;
-  display: inline-block;
-  margin-top: 2px;
-}
-.ov_cases_splitted_graph {
-  width: calc(50% - 20px);
-  background-color: #ebeef5;
-  display: inline-block;
-}
 #cs_per_age_graph {
   padding-bottom: 60px;
 }
@@ -208,4 +200,91 @@ h2 {
   filter: drop-shadow( 0px 0px 5px rgba(0, 0, 0, .3));
   outline: solid 4px white;
   border-radius: 10px;
+}
+
+.ms_bar_part {
+  display: inline-block;
+  vertical-align: top;
+}
+.ms_bar_cur_arrow_container {
+  width: 40px;
+  height: 20px;
+  text-align: center;
+}
+.ms_bar_pred_arrow_container {
+  width: 40px;
+  height: 20px;
+  text-align: center;
+}
+.ms_bar_part_bar {
+  width: 40px;
+  height: 20px;
+}
+
+.ms_bar_cur_arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  margin-bottom: 10px;
+}
+
+.ms_bar_pred_arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  margin-top: 10px;
+}
+
+.ov_cases_splitted_graph_outer {
+  background-color: rgb(251, 251, 251);
+  box-shadow: rgba(0, 0, 0, 0.14) 0px 0px 7px 0px;
+  border-radius: 8px;
+  padding: 10px 20px;
+  width: calc(50% - 60px);
+  display: inline-block;
+}
+.ov_cases_splitted_graph_outer:first-of-type {
+  margin-right: 20px;
+}
+.ov_cases_splitted_graph .dash-graph {
+  height: 300px; 
+}
+
+.co_main {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgb(251, 251, 251);
+  box-shadow: rgba(0, 0, 0, 0.14) 0px 0px 7px 0px;
+  margin-bottom: 20px;
+}
+
+
+.ledgend_color {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  display: inline-block;
+}
+.ledgend_item {
+  margin-bottom: 6px;
+  padding-left: 80px;
+  position: relative;
+} 
+.ledgend_label {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(50% - 20px);
+}
+.co_description {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(50% - 20px);
 }

@@ -177,16 +177,27 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
                         ]),
                     dcc.Dropdown(id='dropdown', options=dropdown_options,
                     value=dropdown_options[0]['value']),
-                    html.div(
+                    html.Div(
                         className="co_main",
                         children=[
+                            html.H4('The Netherlands'),
                             dcc.Graph(id="ov_cases_graph", className="co_main_graph", figure=fig),
-                        html.Div(
-                            id="co_ledgend",
-                            className="ledgend",
-                            children=
-                            self.create_ledgend(self.keys[0]['legend_items'], self.colors_list['nl'][self.keys[0]['key_name']])
-                        )]
+                            html.Div(
+                                className="co_main_descr",
+                                children=[
+                                    html.Div(
+                                        id="co_ledgend",
+                                        className="co_ledgend",
+                                        children=
+                                        self.create_ledgend(self.keys[0]['legend_items'], self.colors_list['nl'][self.keys[0]['key_name']])
+                                    ),
+                                    html.Div(
+                                        className="co_description",
+                                        children='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eleifend convallis justo, nec vehicula massa viverra id. Ut sed est elementum, vehicula est eget, bibendum orci. '
+                                    )
+                                ]
+                            )
+                        ]
                     
  
                     ),
