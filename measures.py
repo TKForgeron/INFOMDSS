@@ -29,7 +29,7 @@ def get_measures_df(start_date: datetime = None) -> pd.DataFrame:
             "ConfirmedDeaths": "deaths",
         },
     )
-    df["date"] = df["date"].apply(lambda x: datetime.strptime(x, "%Y%m%d"))
+    df["date"] = df["date"].apply(lambda x: datetime.strptime(str(x), "%Y%m%d"))
 
     if start_date:
         df = df[df["date"] >= start_date]
@@ -65,7 +65,7 @@ def get_measures_df_il_nl_nsw(start_date: datetime = None) -> pd.DataFrame:
         },
     )
 
-    df["date"] = df["date"].apply(lambda x: datetime.strptime(x, "%Y%m%d"))
+    df["date"] = df["date"].apply(lambda x: datetime.strptime(str(x), "%Y%m%d"))
 
     if start_date:
         df = df[df["date"] >= start_date]

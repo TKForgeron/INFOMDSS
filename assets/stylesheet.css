@@ -178,3 +178,20 @@ h2 {
 .situationBox .js-line {
   stroke: #006EFE !important;
 }
+
+.ledgend_color {
+  width: 70px;
+  height: 20px;
+  display: inline-block;
+}
+.ledgend_label {
+  margin-left: 20px;
+  display: inline-block;
+  margin-top: 2px;
+}
+.ov_cases_splitted_graph {
+  width: calc(50% - 20px);
+  background-color: #ebeef5;
+  display: inline-block;
+}
+

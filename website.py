@@ -24,16 +24,22 @@ class Website:
 
     def get_html(self):
         allHtml = []
+        callbacks = []
         allHtml = allHtml + Header().get_html()
         allHtml = allHtml + CurrentSituation(self.data).get_html()
-        allHtml = allHtml + Cases_Overview(self.data, self.app).get_html()
+        cases_overview = Cases_Overview(self.data, self.app)
+        callbacks = callbacks + cases_overview.get_callbacks()
+        allHtml = allHtml + cases_overview.get_html()
         allHtml = allHtml + Vaccinations_AgeGroup(self.data).get_html()
+        self.callbacks = callbacks
         self.html = html.Div(
             className="pageContainer",
             children=allHtml
         )
 
     def run_website(self, allHtml):
+        for c in self.callbacks:
+            self.app.callback(c['output'], c['input'])(c['funct'])
         self.app.layout = html.Div(children=self.html)
         self.app.run_server(debug=True)
     
