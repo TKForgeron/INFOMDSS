@@ -194,4 +194,18 @@ h2 {
   background-color: #ebeef5;
   display: inline-block;
 }
-
+#cs_per_age_graph {
+  padding-bottom: 60px;
+}
+.legendstyle .legendlines path.js-line {
+  stroke-width: 6px !important;
+}
+/*   */
+.legendstyle g.legend rect.bg {
+  stroke-width: 4px;
+  fill: #fff;
+  -webkit-filter: drop-shadow( 0px 0px 5px rgba(0, 0, 0, .3));
+  filter: drop-shadow( 0px 0px 5px rgba(0, 0, 0, .3));
+  outline: solid 4px white;
+  border-radius: 10px;
+}

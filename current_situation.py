@@ -56,6 +56,7 @@ class CurrentSituation(Website_Component):
                                         'plot_bgcolor': 'rgba(255, 255, 255, 0)',
                                         'margin': { 'b': 0, 't': 0, 'r': 0, 'l': 0 },
                                         'marker': False,
+                                        'fillcolor':'#000000',
                                         'hovermode': 'x unified',
                                         'hoverlabel': {
                                             'bordercolor': 'rgb(229 229 229)',
@@ -64,7 +65,7 @@ class CurrentSituation(Website_Component):
                                                 'color': 'black'
                                             }
                                         }
-                                    }
+                                    },
                                 }, config={ 'staticPlot': False })
                             ),
                             html.Div(
@@ -73,7 +74,8 @@ class CurrentSituation(Website_Component):
                                     html.Div(
                                         className="counter",
                                         children= [
-                                            html.H5(children= helpers.get_latest_kpi_value(self.data['cases_nl'], 'cases')),
+                                            html.H5(children= helpers.get_latest_kpi_value(self.data['cases_nl'], 'cases_per_100k')),
+                                            html.P("per 100k"),
                                             html.P("since yesterday")
                                         ]
                                     )
@@ -91,12 +93,12 @@ class CurrentSituation(Website_Component):
                                         children= [
                                             html.Span(children= [
                                                     html.P("Israël:"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['cases_il'], 'cases')),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['cases_il'], 'cases_per_100k')),
                                                     helpers.get_kpi_trend_arrow(self.data['cases_il'], 'cases')
                                                 ]),
                                             html.Span(children= [
                                                     html.P("Australia (NSW):"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['cases_nsw'], 'cases')),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['cases_nsw'], 'cases_per_100k')),
                                                     helpers.get_kpi_trend_arrow(self.data['cases_nsw'], 'cases')
                                                 ]),
                                         ]
@@ -141,7 +143,8 @@ class CurrentSituation(Website_Component):
                                     html.Div(
                                         className="counter",
                                         children= [
-                                            html.H5(children= helpers.get_latest_kpi_value(self.data['hospitalizations_nl'], 'hospitalizations')),
+                                            html.H5(children= helpers.get_latest_kpi_value(self.data['hospitalizations_nl'], 'hospitalizations_per_100k')),
+                                            html.P("per 100k"),
                                             html.P("since yesterday")
                                         ]
                                     )
@@ -159,12 +162,12 @@ class CurrentSituation(Website_Component):
                                         children= [
                                             html.Span(children= [
                                                     html.P("Israël:"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['hospitalizations_il'], 'hospitalizations')),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['hospitalizations_il'], 'hospitalizations_per_100k')),
                                                     helpers.get_kpi_trend_arrow(self.data['hospitalizations_il'], 'hospitalizations')
                                                 ]),
                                             html.Span(children= [
                                                     html.P("Australia (NSW):"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['hospitalizations_nsw'], 'hospitalizations')),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['hospitalizations_nsw'], 'hospitalizations_per_100k')),
                                                     helpers.get_kpi_trend_arrow(self.data['hospitalizations_nsw'], 'hospitalizations')
                                                 ]),
                                         ]
@@ -209,8 +212,9 @@ class CurrentSituation(Website_Component):
                                     html.Div(
                                         className="counter",
                                         children= [
-                                            html.H5(children= helpers.get_latest_kpi_value(self.data['vaccinations_nl'], 'vaccinations')),
-                                            html.P("since yesterday")
+                                            html.H5(children= helpers.get_latest_kpi_value(self.data['vaccinations_nl'], 'vaccinations_per_100k')),
+                                            html.P("per 100k"),
+                                            html.P("since last week")
                                         ]
                                     )
                                 ]
@@ -227,12 +231,12 @@ class CurrentSituation(Website_Component):
                                         children= [
                                             html.Span(children= [
                                                     html.P("Israël:"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['vaccinations_il'], 'vaccinations')),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['vaccinations_il'], 'vaccinations_per_100k')),
                                                     helpers.get_kpi_trend_arrow(self.data['vaccinations_il'], 'vaccinations')
                                                 ]),
                                             html.Span(children= [
                                                     html.P("Australia (NSW):"),
-                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['vaccinations_nsw'], 'vaccinations')),
+                                                    html.P(className="lightpar", children=helpers.get_latest_kpi_value(self.data['vaccinations_nsw'], 'vaccinations_per_100k')),
                                                     helpers.get_kpi_trend_arrow(self.data['vaccinations_nsw'], 'vaccinations')
                                                 ]),
                                         ]

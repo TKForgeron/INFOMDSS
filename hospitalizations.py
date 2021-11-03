@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime
 import requests
 import json
+import populations
 
 
 def get_hospitalizations_df_il(start_date: datetime = None) -> pd.DataFrame:
@@ -46,9 +47,12 @@ def get_hospitalizations_df_il(start_date: datetime = None) -> pd.DataFrame:
     if start_date:
         df = df[df["date"] >= start_date]
 
-    df.sort_values(by=["date"])
-    df = df[["date", "hospitalizations"]]
+    country_population = populations.get_population_nsw()
 
+    df["hospitalizations_per_100k"] = round(df["hospitalizations"] / country_population * 100000, 1)
+
+    df.sort_values(by=["date"])
+    df = df[["date", "hospitalizations", "hospitalizations_per_100k"]]
 
     return df
 
@@ -86,7 +90,12 @@ def get_hospitalizations_df_nl(start_date: datetime = None) -> pd.DataFrame:
     if start_date:
         df = df[df["date"] >= start_date]
 
+    country_population = populations.get_population_nl()
+
+    df["hospitalizations_per_100k"] = round(df["hospitalizations"] / country_population * 100000, 1)
+
     df.sort_values(by=["date"])
+    df = df[["date", "hospitalizations", "hospitalizations_per_100k"]]
 
     return df
 
@@ -153,7 +162,12 @@ def get_hospitalizations_df_nsw(start_date: datetime = None) -> pd.DataFrame:
     df["hospitalizations"] = df["hospitalizations"].str.replace(',', '')
     df["hospitalizations"] = df["hospitalizations"].astype(int)
 
+    country_population = populations.get_population_nsw()
+
+    df["hospitalizations_per_100k"] = round(df["hospitalizations"] / country_population * 100000, 1)
+
     df.sort_values(by=["date"])
+    df = df[["date", "hospitalizations", "hospitalizations_per_100k"]]
 
     return df
 

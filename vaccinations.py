@@ -60,8 +60,10 @@ def get_vaccinations_df_il(start_date: datetime = None) -> pd.DataFrame:
     if start_date:
         df = df[df["date"] >= start_date]
 
-    df = df.sort_values(by=["date"])
-    df = df[["date", "vaccinations"]]
+    country_population = populations.get_population_il()
+    df["vaccinations_per_100k"] = round(df["vaccinations"] / country_population * 100000, 1)
+    df.sort_values(by=["date"])
+    df = df[["date", "vaccinations", "vaccinations_per_100k"]]
 
     return df
 
@@ -111,7 +113,11 @@ def get_vaccinations_df_nl(start_date: datetime = None) -> pd.DataFrame:
     df["vaccinations"] = df["vaccinations"].transform(
         lambda s: s.sub(s.shift().fillna(0)).abs()
     )
-    df = df[["date", "vaccinations"]]
+
+    country_population = populations.get_population_il()
+    df["vaccinations_per_100k"] = round(df["vaccinations"] / country_population * 100000, 1)
+    df.sort_values(by=["date"])
+    df = df[["date", "vaccinations", "vaccinations_per_100k"]]
 
     return df
 
@@ -142,7 +148,11 @@ def get_vaccinations_df_nsw(start_date: datetime = None) -> pd.DataFrame:
     df["vaccination_coverage"] = df["vaccination_coverage"].astype(float)
 
     df["vaccinations"] = df["vaccination_coverage"] * df["population"]
-    df = df[["date", "vaccinations"]].iloc[[0]]
+
+    country_population = populations.get_population_nsw()
+    df["vaccinations_per_100k"] = round(df["vaccinations"] / country_population * 100000, 1)
+    df.sort_values(by=["date"])
+    df = df[["date", "vaccinations", "vaccinations_per_100k"]].iloc[[0]]
 
     return df
 
