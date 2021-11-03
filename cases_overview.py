@@ -152,7 +152,9 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
 
     def get_html(self):
         fig = px.line(self.dfs['nl'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nl']['C1_School closing'], hover_data=['C1_School closing_hd'])
-        fig.update_layout(showlegend=False)
+        fig.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
+        fig.update_xaxes(showgrid=False)
+        fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightPink')
         # fig = px.line(self.dfs, x="date", y="cases", color="seq", color_discrete_sequence=self.df_measures_strictness_colors)
         # fig = px.line(self.df_temperature, x="date", y="cases", color="seq", color_discrete_sequence=self.df_temperature_colors, hover_data=['temp'])
 
@@ -161,7 +163,7 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
         fig_il.update_layout(margin=dict(r=0, t=0, l=20, b=20))
 
         fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nsw']['C1_School closing'], hover_data=['C1_School closing_hd'])
-        fig_nsw.update_layout(showlegend=False)
+        fig_nsw.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
         dropdown_options = self.get_dropdown_options()
         return [
             html.Div(
