@@ -22,7 +22,7 @@ class Cases_Overview(Website_Component):
         self.app = app
         self.df = self.create_cases_measures_df()
         self.df_colors = self.get_colors_pallete(self.df, 'strictness', 5)
-        app.callback(Output('ov_cases_graph', 'figure'), [Input('dropdown', 'value')])(self.on_dropdown_change)
+        # app.callback(Output('ov_cases_graph', 'figure'), [Input('dropdown', 'value')])(self.on_dropdown_change)
 
     def get_html(self):
         # print('000')
@@ -32,10 +32,16 @@ class Cases_Overview(Website_Component):
             html.Div(
                 className="container",
                 children=[
-                    dcc.Dropdown(id='dropdown', options=[
-                    {'label': 'A', 'value': 'A'},
-                    {'label': 'B', 'value': 'B'}],
-                    value = 'A'),
+                        html.Div(
+                        className="titleBar",
+                        children=[
+                            html.H3('Cases'),
+                            html.Hr()
+                        ]),
+                    # dcc.Dropdown(id='dropdown', options=[
+                    # {'label': 'A', 'value': 'A'},
+                    # {'label': 'B', 'value': 'B'}],
+                    # value = 'A'),
                     dcc.Graph(id="ov_cases_graph", figure=fig)
 
             ]
