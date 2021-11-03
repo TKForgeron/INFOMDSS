@@ -151,15 +151,17 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
 
     def get_html(self):
         fig = px.line(self.dfs['nl'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nl']['C1_School closing'], hover_data=['C1_School closing_hd'])
-        fig.update_layout(showlegend=False)
+        fig.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
+        fig.update_xaxes(showgrid=False)
+        fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightPink')
         # fig = px.line(self.dfs, x="date", y="cases", color="seq", color_discrete_sequence=self.df_measures_strictness_colors)
         # fig = px.line(self.df_temperature, x="date", y="cases", color="seq", color_discrete_sequence=self.df_temperature_colors, hover_data=['temp'])
 
         fig_il = px.line(self.dfs['il'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['il']['C1_School closing'], hover_data=['C1_School closing_hd'])
-        fig_il.update_layout(showlegend=False)
+        fig_il.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
 
         fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nsw']['C1_School closing'], hover_data=['C1_School closing_hd'])
-        fig_nsw.update_layout(showlegend=False)
+        fig_nsw.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
         dropdown_options = self.get_dropdown_options()
         return [
             html.Div(
@@ -282,15 +284,21 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
 
     def on_dropdown_change(self, value):
         fig = px.line(self.dfs['nl'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nl'][value], hover_data=[value + '_hd'])
-        fig.update_layout(showlegend=False)
+        fig.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
+        fig.update_xaxes(showgrid=False)
+        fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightPink')
 
         fig_il = px.line(self.dfs['il'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['il'][value], hover_data=[value + '_hd'])
-        fig_il.update_layout(showlegend=False)
+        fig.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
+        fig.update_xaxes(showgrid=False)
+        fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightPink')
         # print(self.colors['il'])
 
 
         fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nsw'][value], hover_data=[value + '_hd'])
-        fig_nsw.update_layout(showlegend=False)
+        fig.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
+        fig.update_xaxes(showgrid=False)
+        fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightPink')
         # if value == 'temp':
         # elif value == 'none':
         #     fig = px.line(self.data['cases_nl'], x="date", y="cases")
