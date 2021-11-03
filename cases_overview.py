@@ -16,7 +16,9 @@ USE_DATA = [
     'cases_nsw',
     'cases_il',
     'measures',
-    'temperature_nl'
+    'temperature_nl',
+    'temperature_nsw',
+    'temperature_il'
 ]
 
 class Cases_Overview(Website_Component):
@@ -31,20 +33,21 @@ class Cases_Overview(Website_Component):
 1 - recommend closing or all schools open with alterations resulting in significant differences compared to non-Covid-19 operations
 2 - require closing (only some levels or categories, eg just high school, or just public schools)
 3 - require closing all levels
-Blank - no data ''' },
+Blank - no data ''', 'data_type': 'measures' },
 { 'key_name': 'C2_Workplace closing', 'value_range': [0, 3], 'steps': None, 'colors': 'norm', 'label': 'Workplace closing', 'descr': ''' 	0 - no measures
 1 - recommend closing (or recommend work from home) or all businesses open with alterations resulting in significant differences compared to non-Covid-19 operation
 2 - require closing (or work from home) for some sectors or categories of workers
 3 - require closing (or work from home) for all-but-essential workplaces (eg grocery stores, doctors)
-Blank - no data ''' },
+Blank - no data ''', 'data_type': 'measures' },
 { 'key_name': 'C3_Cancel public events', 'value_range': [0, 2], 'steps': None, 'colors': 'norm', 'label': 'Cancel public events closing', 'descr': ''' 	0 - no measures
 1 - recommend cancelling
-2 - require cancelling ''' },
+2 - require cancelling ''', 'data_type': 'measures' },
 { 'key_name': 'StringencyIndex', 'value_range': [0, 100], 'steps': 5, 'colors': 'norm', 'label': 'Measures', 'descr': ''' 	0 - no measures
 1 - recommend closing or all schools open with alterations resulting in significant differences compared to non-Covid-19 operations
 2 - require closing (only some levels or categories, eg just high school, or just public schools)
 3 - require closing all levels
-Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80', '80 - 100'] },
+Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80', '80 - 100'], 'data_type': 'measures' },
+{ 'key_name': 'temp', 'bins': [-np.inf, 0, 10, 20, 30, np.inf], 'colors': 'norm', 'label': 'Temperature', 'descr': ''' ''', 'legend_items': ['< 0', '0 - 10', '10 - 20', '20 - 30', '30+'], 'data_type': 'temperature' },
         ]
         self.preprocess_keys()
         self.dfs, self.colors, self.colors_list = self.create_dfs()
@@ -76,32 +79,33 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
         for country in countries:
             main_df = self.data[country['data_name']]
             main_df_bu = self.data[country['data_name']]
-            measures = self.data['measures']
-            measures = measures[measures['CountryCode'] == country['CountryCode']]
             colors_pallete = {}
             colors_list = {}
             for k in self.keys:
-                df = measures[['date', k['key_name']]]
-                if country['key'] == 'nl' and k['key_name'] == 'C1_School closing':
-                    df.to_csv('test_f.csv')
+                new_data = None
+                if k['data_type'] == 'measures':
+                    new_data = self.data['measures']
+                    new_data = new_data[new_data['CountryCode'] == country['CountryCode']]
+                elif k['data_type'] == 'temperature':
+                    new_data = self.data['temperature_' + country['key']]
+                df = new_data[['date', k['key_name']]]
 
                 df = pd.merge(main_df_bu[['date']], df, left_on='date', right_on='date', how='left')
-                if country['key'] == 'nl' and k['key_name'] == 'C1_School closing':
-                    df.to_csv('test_g.csv')
                 steps = None
                 df[k['key_name'] + '_hd'] = df[k['key_name']] # hd = hover_Data
-                if 'steps' not in k or not k['steps']:
+                if 'bins' in k and k['bins']:
+                    bins = k['bins']
+                    names = list(range(1, len(bins)))
+                    steps = len(bins)
+                    df[k['key_name']] = pd.cut(df[k['key_name']], bins, labels=names)
+                elif 'steps' not in k or not k['steps']:
                     steps = k['value_range'][1] - k['value_range'][0] + 1
                 else:
                     steps = k['steps']
                     df[k['key_name']] = np.floor((df[k['key_name']]  - k['value_range'][0]) / k['value_range'][1] * steps)
                 
 
-                if country['key'] == 'nsw' and k['key_name'] == 'C1_School closing':
-                    df.to_csv('test_d.csv')
                 df = self.create_seq(df.copy(), k['key_name'], k['key_name'] + '_seq')
-                if country['key'] == 'nsw' and k['key_name'] == 'C1_School closing':
-                    df.to_csv('test_e.csv')
                 colors_pallete[k['key_name']], colors_list[k['key_name']]  = self.get_colors_pallete(df, k['key_name'], steps, k['key_name'] + '_seq')
                 main_df = pd.merge(main_df, df, left_on='date', right_on='date', how='left')
             dfs[country['key']] = main_df
@@ -245,7 +249,7 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
         # this funciton assumes one col to be available named seq
 
         none_color = np.array([200, 200, 200])
-
+        none_color = '#%02x%02x%02x' % (none_color[0], none_color[1], none_color[2])
         start_color = np.array([47, 47, 255])
         end_color = np.array([247, 0, 0])
         
@@ -273,16 +277,19 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
 
             pallete.append(color) # to hex
             seq += 1
+
         return pallete, color_pallete
 
     def on_dropdown_change(self, value):
         fig = px.line(self.dfs['nl'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nl'][value], hover_data=[value + '_hd'])
         fig.update_layout(showlegend=False)
 
-        fig_il = px.line(self.dfs['il'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['il'][value], hover_data=[value + '_hd'])
+        fig_il = px.line(self.dfs['il'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['il'][value], hover_data=[value + '_hd'])
         fig_il.update_layout(showlegend=False)
+        # print(self.colors['il'])
 
-        fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nsw'][value], hover_data=[value + '_hd'])
+
+        fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nsw'][value], hover_data=[value + '_hd'])
         fig_nsw.update_layout(showlegend=False)
         # if value == 'temp':
         # elif value == 'none':
