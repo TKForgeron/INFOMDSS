@@ -14,16 +14,16 @@ import math
 import cases_overview_config as config
 
 USE_DATA = [
-    'cases_nl',
-    'cases_nsw',
-    'cases_il',
+    'vaccinations_nl',
+    'vaccinations_nsw',
+    'vaccinations_il',
     'measures',
     'temperature_nl',
     'temperature_nsw',
     'temperature_il'
 ]
 
-class Cases_Overview(Website_Component):
+class Vaccinations_Overview(Website_Component):
     def __init__(self, data, app):
         self.store_required_data(data, USE_DATA)
         self.app = app
@@ -38,8 +38,8 @@ class Cases_Overview(Website_Component):
         # limit range of IL and NSW
         days_to_show = 100
         start_date = datetime.today() - timedelta(days=days_to_show)
-        self.data['cases_il'] = self.data['cases_il'][self.data['cases_il']['date'] > start_date]
-        self.data['cases_nsw'] = self.data['cases_nsw'][self.data['cases_nsw']['date'] > start_date]
+        self.data['vaccinations_il'] = self.data['vaccinations_il'][self.data['vaccinations_il']['date'] > start_date]
+        self.data['vaccinations_nsw'] = self.data['vaccinations_nsw'][self.data['vaccinations_nsw']['date'] > start_date]
 
     def preprocess_keys(self):
         self.keys = list(map(self.preporcess_key, self.keys))
@@ -54,9 +54,7 @@ class Cases_Overview(Website_Component):
         color_palletes = {}
         color_lists = {}
         countries = [
-            { 'CountryCode': 'NLD', 'data_name': 'cases_nl', 'key': 'nl'}, 
-            { 'CountryCode': 'ISR', 'data_name': 'cases_il', 'key': 'il'},
-            { 'CountryCode': 'AUS', 'data_name': 'cases_nsw', 'key': 'nsw'}
+            { 'CountryCode': 'NLD', 'data_name': 'vaccinations_nl', 'key': 'nl'}, 
         ]
         for country in countries:
             main_df = self.data[country['data_name']]
@@ -104,7 +102,7 @@ class Cases_Overview(Website_Component):
     def get_callbacks(self):
         # used by Website() to get callbacks
         return [
-            { 'output': [Output('ov_cases_graph', 'figure'), Output('ov_cases_graph_il', 'figure'), Output('ov_cases_graph_nsw', 'figure'), Output('co_ledgend', 'children'),  Output('co_description', 'children')], 'input': Input('co_dropdown', 'value'), 'funct': self.on_dropdown_change}
+            { 'output': [Output('vo_vaccinations_graph', 'figure'), Output('vo_ledgend', 'children'),  Output('vo_description', 'children')], 'input': Input('vo_dropdown', 'value'), 'funct': self.on_dropdown_change}
         ]
 
     def create_ledgend(self, legend_items: str, colors: list ):
@@ -131,17 +129,11 @@ class Cases_Overview(Website_Component):
         return html_items
 
     def get_html(self):
-        fig = px.line(self.dfs['nl'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nl']['C1_School closing'], hover_data=['C1_School closing_hd'])
+        fig = px.line(self.dfs['nl'], x="date", y="vaccinations", color="C1_School closing_seq", color_discrete_sequence=self.colors['nl']['C1_School closing'], hover_data=['C1_School closing_hd'])
         fig.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
         fig.update_xaxes(showgrid=False)
         fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightPink')
 
-        fig_il = px.line(self.dfs['il'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['il']['C1_School closing'], hover_data=['C1_School closing_hd'])
-        fig_il.update_layout(showlegend=False)
-        fig_il.update_layout(margin=dict(r=0, t=0, l=20, b=20))
-
-        fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nsw']['C1_School closing'], hover_data=['C1_School closing_hd'])
-        fig_nsw.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
         dropdown_options = self.get_dropdown_options()
         return [
             html.Div(
@@ -150,27 +142,27 @@ class Cases_Overview(Website_Component):
                     html.Div(
                         className="titleBar",
                         children=[
-                            html.H3('Cases'),
+                            html.H3('Vaccinations'),
                             html.Hr()
                         ]),
-                    dcc.Dropdown(id='co_dropdown', options=dropdown_options,
+                    dcc.Dropdown(id='vo_dropdown', options=dropdown_options,
                     value=dropdown_options[0]['value']),
                     html.Div(
                         className="co_main",
                         children=[
                             html.H4('The Netherlands'),
-                            dcc.Graph(id="ov_cases_graph", className="co_main_graph", figure=fig),
+                            dcc.Graph(id="vo_vaccinations_graph", className="co_main_graph", figure=fig),
                             html.Div(
                                 className="co_main_descr",
                                 children=[
                                     html.Div(
-                                        id="co_ledgend",
+                                        id="vo_ledgend",
                                         className="co_ledgend",
                                         children=
                                         self.create_ledgend(self.keys[0]['legend_items'], self.colors_list['nl'][self.keys[0]['key_name']])
                                     ),
                                     html.Div(
-                                        id="co_description",
+                                        id="vo_description",
                                         className="co_description",
                                         children=[html.H5('Description'), self.keys[0]['description']]
                                     )
@@ -179,39 +171,7 @@ class Cases_Overview(Website_Component):
                         ]
                     
  
-                    ),
-                    html.Div(
-                        className="ov_cases_splitted",
-                        children=[
-                            html.Div(
-                                className="ov_cases_splitted_graph_outer",
-                                children=[
-                                    html.Div(
-                                        className="ov_cases_splitted_title_container",
-                                        children=[html.H4('Israel')]
-                                    ),
-                                    html.Div(
-                                        className="ov_cases_splitted_graph",
-                                        children=[dcc.Graph(id="ov_cases_graph_il", figure=fig_il)]
-                                    )
-                                ]
-                            ),
-                            html.Div(
-                                className="ov_cases_splitted_graph_outer",
-                                children=[
-                                    html.Div(
-                                        className="ov_cases_splitted_title_container",
-                                        children=[html.H4('New South Wales')]
-                                    ),
-                                    html.Div(
-                                        className="ov_cases_splitted_graph",
-                                        children=[dcc.Graph(id="ov_cases_graph_nsw", figure=fig_nsw)]
-                                    )
-                                ]
-                            )
-                        ]
                     )
-
             ]
         )]
 
@@ -234,12 +194,12 @@ class Cases_Overview(Website_Component):
         df["date"] = pd.to_datetime(df["date"])
         return df
     
-    def create_cases_measures_df(self) -> pd.DataFrame:
-        cases = self.data['cases_nl']
+    def create_vaccinations_measures_df(self) -> pd.DataFrame:
+        cases = self.data['vaccinations_nl']
         measures = self.data['measures']
         measures = measures[measures['CountryCode'] == 'NLD']
         merged = pd.merge(cases, measures, left_on='date', right_on='date', how='left')
-        merged = merged.rename(columns={ 'cases_x': 'cases' })
+        merged = merged.rename(columns={ 'vaccinations_x': 'cases' })
         merged = merged[['date', 'StringencyIndex', 'cases']]
         merged['strictness'] = np.floor(merged['StringencyIndex'] / 100 * 5)
 
@@ -247,8 +207,8 @@ class Cases_Overview(Website_Component):
 
         return merged
 
-    def create_cases_temperature_df(self) -> pd.DataFrame:
-        cases = self.data['cases_nl']
+    def create_vaccinations_temperature_df(self) -> pd.DataFrame:
+        cases = self.data['vaccinations_nl']
         measures = self.data['temperature_nl']
 
         merged = pd.merge(cases, measures, left_on='date', right_on='date', how='left')
@@ -294,17 +254,11 @@ class Cases_Overview(Website_Component):
 
 
     def on_dropdown_change(self, value):
-        fig = px.line(self.dfs['nl'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nl'][value], hover_data=[value + '_hd'])
+        fig = px.line(self.dfs['nl'], x="date", y="vaccinations", color=value + "_seq", color_discrete_sequence=self.colors['nl'][value], hover_data=[value + '_hd'])
         self.style_fig(fig)
 
-        fig_il = px.line(self.dfs['il'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['il'][value], hover_data=[value + '_hd'])
-        self.style_fig(fig_il)
-
-        fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nsw'][value], hover_data=[value + '_hd'])
-        self.style_fig(fig_nsw)
-
         key = find_in_list(self.keys, lambda i: i['key_name'] == value)
-        return fig, fig_il, fig_nsw, self.create_ledgend(key['legend_items'], self.colors_list['nl'][value]), [html.H5('Description'), key['description']]
+        return fig, self.create_ledgend(key['legend_items'], self.colors_list['nl'][value]), [html.H5('Description'), key['description']]
 
 def find_in_list(list: list, function):
     for item in list:
