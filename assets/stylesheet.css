@@ -262,6 +262,7 @@ h4 {
   background-color: rgb(251, 251, 251);
   box-shadow: rgba(0, 0, 0, 0.14) 0px 0px 7px 0px;
   margin-bottom: 20px;
+  border-radius: 8px;
 }
 
 
@@ -288,3 +289,96 @@ h4 {
   vertical-align: top;
   width: calc(50% - 20px);
 }
+.ms_strictness_container {
+  display: inline-block;
+}
+.ms_strictness_label {
+  font-size: 14px;
+}
+.ms_strictness_count {
+  font-size: 36px;
+}
+.ms_bar_cur_pointer {
+  background-color: #e9e8e8;
+  position: absolute;
+  margin-left: -25px !important;
+  margin-top: -25px !important;
+  border-radius: 10px;
+  padding: 0px 20px;
+}
+.ms_bar_cur_pointer p {
+  font-size: 14px;
+  color: rgb(20, 20, 20);
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.ms_bar_cur_pointer p:after {
+  content: " ";
+  position: absolute;
+  right: 30px;
+  bottom: -12px;
+  border-top: 12px solid #e9e8e8;
+  border-right: 12px solid transparent;
+  border-left: 12px solid transparent;
+  border-bottom: none;
+}
+.ms_bar_pred_pointer {
+  background-color: #e9e8e8;
+  position: absolute;
+  margin-left: -29px !important;
+  margin-top: 15px;
+  border-radius: 10px;
+  padding: 0px 20px;
+}
+.ms_bar_pred_pointer p {
+  font-size: 14px;
+  color: rgb(20, 20, 20);
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.ms_bar_pred_pointer p::before{
+  content: " ";
+  position: absolute;
+  right: 38px;
+  top: -12px;
+  border-bottom: 12px solid #e9e8e8;
+  border-right: 12px solid transparent;
+  border-left: 12px solid transparent;
+  border-top: none;
+}
+.ms_bar {
+  margin-top: 20px;
+  padding: 28px 0px;
+}
+.ms_bar .ms_bar_part:first-child .ms_bar_part_bar {
+  border-radius: 8px 0px 0px 8px;
+}
+.ms_bar .ms_bar_part:last-child .ms_bar_part_bar {
+  border-radius: 0px 8px 8px 0px;
+}
+.ms_strictness_current {
+  width: auto;
+  float: left;
+  margin-right: 40px;
+}
+.ms_container_left {
+  width: 50%;
+  float: left; 
+}
+.ms_container_right {
+  width: calc(50% - 30px);
+  float: left;
+  padding-left: 25px;
+  border-left: 1px solid rgb(209, 209, 209);
+  margin-top: 12px;
+}
+.ms_container_right h5 {
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+.ms_container_right p {
+  margin-top: 5px;
+  font-weight: 300;
+  }

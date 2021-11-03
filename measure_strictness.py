@@ -41,50 +41,65 @@ class Measure_Strictness(Website_Component):
                         ]
                     ),
                     html.Div(
-                        className="ms_graph_container",
+                        className="ms_graph_container co_main",
                         children=[
                             dcc.Graph(id="ms_strictness_graph", figure=fig)
                         ]
                     ),
                     html.Div(
-                        className="ms_strictness_container",
+                        className="ms_strictness_container co_main",
                         children=[
                             html.Div(
-                                className="ms_strictness_left",
+                                className="ms_container_left",
                                 children=[
                                     html.Div(
-                                        className="ms_strictness_current",
+                                        className="ms_strictness_left",
                                         children=[
                                             html.Div(
-                                                className="ms_strictness_label",
-                                                children='Current strictness'
+                                                className="ms_strictness_current",
+                                                children=[
+                                                    html.Div(
+                                                        className="ms_strictness_label",
+                                                        children='Current strictness'
+                                                    ),
+                                                    html.Div(
+                                                        className="ms_strictness_count",
+                                                        children=str(self.cur_level)
+                                                    )
+                                                ]
                                             ),
                                             html.Div(
-                                                className="ms_strictness_label",
-                                                children=str(self.cur_level)
+                                                className="ms_strictness_predicted",
+                                                children=[
+                                                    html.Div(
+                                                        className="ms_strictness_label",
+                                                        children='Predicted strictness'
+                                                    ),
+                                                    html.Div(
+                                                        className="ms_strictness_count",
+                                                        children=str(self.predicted_level)
+                                                    )
+                                                ]
+                                            ),
+                                            html.Div(
+                                                className="ms_bar",
+                                                children=self.create_color_bar()
                                             )
                                         ]
                                     ),
-                                    html.Div(
-                                        className="ms_strictness_predicted",
-                                        children=[
-                                            html.Div(
-                                                className="ms_strictness_label",
-                                                children='Predicted strictness'
-                                            ),
-                                            html.Div(
-                                                className="ms_strictness_label",
-                                                children=str(self.predicted_level)
-                                            )
-                                        ]
-                                    ),
-                                    html.Div(
-                                        className="ms_bar",
-                                        children=self.create_color_bar()
-                                    )
                                 ]
                             ),
-
+                        html.Div(
+                                className="ms_container_right",
+                                children=[
+                                    html.Div(
+                                        children = [
+                                            html.H5('Information'),
+                                            html.P('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh ligula, consectetur ut erat et, rhoncus iaculis purus. Pellentesque iaculis laoreet vulputate.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh ligula, consectetur ut erat et, rhoncus iaculis purus. Pellentesque iaculis laoreet vulputate.')
+                                        ]
+                                    )
+                                ]
+                            )
                         ]
                     )
                 ])    
@@ -103,7 +118,12 @@ class Measure_Strictness(Website_Component):
             top_childs = []
             if i == self.cur_level:
                 top_childs.append(
-                    html.I(className="ms_bar_cur_arrow")
+                    html.Div(
+                        className='ms_bar_cur_pointer',
+                        children=[
+                            html.P("Current"),
+                        ]
+                    )
                 )
             cur_el.append(
                 html.Div(
@@ -120,7 +140,12 @@ class Measure_Strictness(Website_Component):
             bottom_childs = []
             if (i == self.predicted_level):
                 bottom_childs.append(
-                    html.I(className="ms_bar_pred_arrow")
+                    html.Div(
+                        className='ms_bar_pred_pointer',
+                        children=[
+                            html.P("Predicted"),
+                        ]
+                    )
                 )
             cur_el.append(
                 html.Div(
