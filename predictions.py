@@ -44,6 +44,6 @@ def predict_stringency_index() -> dict:
     }
 
 
-print(datetime.now())
-result = predict_stringency_index()
-print(result)
+# print(datetime.now())
+# result = predict_stringency_index()
+# print(result)
