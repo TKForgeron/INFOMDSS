@@ -29,6 +29,8 @@ class Data_Importer:
             print('Unable to load data from cache, downloading new!')
         start_time = time.time()
         self.update_progress()
+        self.data['hospitalizations_nsw'] = hospitalizations.get_hospitalizations_df_nsw()
+        self.update_progress()
         self.data['cases_nl'] = cases.get_cases_df_nl()
         self.update_progress()
         self.data['cases_il'] = cases.get_cases_df_il()
@@ -50,8 +52,6 @@ class Data_Importer:
         self.data['hospitalizations_nl'] = hospitalizations.get_hospitalizations_df_nl()
         self.update_progress()
         self.data['hospitalizations_il'] = hospitalizations.get_hospitalizations_df_il()
-        self.update_progress()
-        self.data['hospitalizations_nsw'] = hospitalizations.get_hospitalizations_df_nsw()
 
         self.update_progress()
         self.data['measures'] = measures.get_measures_df_il_nl_nsw()
