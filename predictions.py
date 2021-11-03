@@ -1,43 +1,49 @@
 import pandas as pd
+import numpy as np
 from statistics import mean
+from datetime import datetime
+import random
 
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import (
-    train_test_split,
-    cross_val_score,
-    KFold,
-)
-from sklearn.linear_model import LogisticRegression, LinearRegression
-from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split, cross_val_score, KFold
+from sklearn.tree import DecisionTreeRegressor
 
 import preprocessing_predictions as prep
 
-# Loading the data
-df = prep.get_prediction_data()
 
-folds = KFold(n_splits=5, shuffle=True, random_state=32)
+def predict_stringency_index() -> dict:
 
-x_train = df[["deaths", "cases", "hospitalizations", "vaccination_coverage", "temp"]]
-y_train = df["StringencyIndexForDisplay"]
+    print("Loading prediction data")
+    df = prep.get_prediction_train_data()
+    x_train = df[["deaths", "cases", "hospitalizations", "temp"]]  # , 'vaccinations']]
+    y_train = df["StringencyIndexForDisplay"]
 
-scores_dt = cross_val_score(DecisionTreeClassifier(), x_train, y_train, cv=folds)
-print("Accuracy decision tree:", mean(scores_dt))
+    # folds = KFold(n_splits=10, shuffle=True, random_state=32)
 
-scores_linear = cross_val_score(LinearRegression(), x_train, y_train, cv=folds)
-print("Accuracy linear regression:", mean(scores_linear))
+    x_train = df[["deaths", "cases", "hospitalizations", "temp"]]
+    y_train = df["StringencyIndexForDisplay"]
 
-scores_logistic = cross_val_score(LogisticRegression(), x_train, y_train, cv=folds)
-print("Accuracy logistic:", mean(scores_logistic))
+    regressor = DecisionTreeRegressor(
+        criterion="absolute_error", max_depth=20, random_state=32
+    )
+
+    print("fitting regression tree...")
+    regressor.fit(x_train, y_train)
+
+    prediction_data = prep.get_data_to_predict_on()
+    stringency_nl_now = prep.get_latest_stringency_nl()
+    prediction_data = prediction_data.iloc[:, -4:]
+
+    print("now predicting on: \n", prediction_data)
+    stringency_prediction = regressor.predict(prediction_data)
+    stringency_prediction = stringency_prediction[0]
+
+    return {
+        "stringency_nl_now": stringency_nl_now,
+        "stringency_prediction": stringency_prediction,
+    }
 
 
-random_forest_regressor = RandomForestRegressor(
-    n_jobs=-1,
-    n_estimators=12,
-    min_samples_split=5,
-    max_depth=21,
-    max_features="log2",
-    criterion="absolute_error",
-)
+# print(datetime.now())
+# result = predict_stringency_index()
+# print(result)

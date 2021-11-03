@@ -16,10 +16,15 @@ def get_cases_df_il(start_date: datetime = None) -> pd.DataFrame:
     Returns:
         df with columns [date, cases, cases_per_100k]
     """
-
-    df = pd.read_csv(
-        "data/Israel/Israel_COVIDandVaccinated/geographic-sum-per-day-ver_00536_DS4.csv"
-    )
+    try:
+        endpoint = "https://data.gov.il/api/3/action/datastore_search?resource_id=d07c0771-01a8-43b2-96cc-c6154e7fa9bd&limit=1000000"
+        response = requests.get(endpoint)
+        records = json.loads(response.content)["result"]["records"]
+        df = pd.DataFrame(records)
+    except:
+        df = pd.read_csv(
+            "data/Israel/Israel_COVIDandVaccinated/geographic-sum-per-day-ver_00536_DS4.csv"
+        )
 
     df["accumulated_cases"] = (
         df["accumulated_cases"].replace(to_replace="<15", value="0").astype(int)
@@ -27,7 +32,7 @@ def get_cases_df_il(start_date: datetime = None) -> pd.DataFrame:
 
     df = df.groupby("date").sum("accumulated_cases").reset_index()
 
-    df["cases"] = df.groupby(["town_code"])["accumulated_cases"].transform(
+    df["cases"] = df["accumulated_cases"].transform(
         lambda s: s.sub(s.shift().fillna(0)).abs()
     )
 
@@ -56,8 +61,13 @@ def get_cases_df_nsw(start_date: datetime = None) -> pd.DataFrame:
     Returns:
         df with columns [date, cases, cases_per_100k]
     """
-
-    df = pd.read_csv("data/NSW/confirmed_cases_table2_age_group_DS6.csv")
+    try:
+        endpoint = "https://data.nsw.gov.au/data/api/3/action/datastore_search?resource_id=24b34cb5-8b01-4008-9d93-d14cf5518aec&limit=1000000"
+        response = requests.get(endpoint)
+        records = json.loads(response.content)["result"]["records"]
+        df = pd.DataFrame(records)
+    except:
+        df = pd.read_csv("data/NSW/confirmed_cases_table2_age_group_DS6.csv")
 
     df = df.rename({"notification_date": "date"}, axis="columns")
     df["date"] = pd.to_datetime(df["date"])
@@ -86,10 +96,15 @@ def get_cases_df_nl(start_date: datetime = None) -> pd.DataFrame:
     Returns:
         df with columns [date, cases, cases_per_100k]
     """
-
-    df = pd.read_csv(
-        "data/Netherlands/COVID-19_aantallen_gemeente_per_dag.csv", sep=";"
-    )
+    try:
+        df = pd.read_csv(
+            "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv",
+            sep=";",
+        )
+    except:
+        df = pd.read_csv(
+            "data/Netherlands/COVID-19_aantallen_gemeente_per_dag.csv", sep=";"
+        )
 
     df = df.rename({"Date_of_publication": "date"}, axis="columns")
 

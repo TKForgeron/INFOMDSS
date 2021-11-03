@@ -42,7 +42,7 @@ def get_vaccinations_df_il(start_date: datetime = None) -> pd.DataFrame:
     df[vaccination_columns] = (
         df[vaccination_columns].replace(to_replace="<15", value="0").astype(float)
     )
- 
+
     df["accumulated_vaccinations"] = df[vaccination_columns].sum(axis=1)
 
     df = df.groupby("date")["accumulated_vaccinations"].sum().reset_index()
@@ -52,8 +52,13 @@ def get_vaccinations_df_il(start_date: datetime = None) -> pd.DataFrame:
     )
 
     df["date"] = pd.to_datetime(df["date"])
-    df['date'] = df['date'].dt.isocalendar().year.astype(str) + "-W" + df['date'].dt.isocalendar().week.astype(str) + "-1"
-    df['date'] = pd.to_datetime(df['date'], format='%G-W%V-%u')
+    df["date"] = (
+        df["date"].dt.isocalendar().year.astype(str)
+        + "-W"
+        + df["date"].dt.isocalendar().week.astype(str)
+        + "-1"
+    )
+    df["date"] = pd.to_datetime(df["date"], format="%G-W%V-%u")
 
     df = df.groupby("date")["vaccinations"].sum().reset_index()
 
@@ -104,9 +109,7 @@ def get_vaccinations_df_nl(start_date: datetime = None) -> pd.DataFrame:
             * 0.01
         )
 
-    df["vaccinations"] = (
-        df.drop("date", axis=1).sum(axis=1) 
-    )
+    df["vaccinations"] = df.drop("date", axis=1).sum(axis=1)
 
     df["vaccinations"] = df["vaccinations"].transform(
         lambda s: s.sub(s.shift().fillna(0)).abs()
