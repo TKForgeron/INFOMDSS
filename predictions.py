@@ -44,8 +44,3 @@ def predict_stringency_index() -> pd.DataFrame:
     result_df = pd.DataFrame.from_dict(preDICTion)
 
     return result_df
-
-
-print(datetime.now())
-result = predict_stringency_index()
-print(result)
