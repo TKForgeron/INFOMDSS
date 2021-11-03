@@ -246,7 +246,7 @@ h4 {
   box-shadow: rgba(0, 0, 0, 0.14) 0px 0px 7px 0px;
   border-radius: 8px;
   padding: 10px 20px;
-  width: calc(50% - 60px);
+  width: calc(50% - 50px);
   display: inline-block;
 }
 .ov_cases_splitted_graph_outer:first-of-type {
@@ -278,13 +278,27 @@ h4 {
   padding-left: 80px;
   position: relative;
 } 
-.ledgend_label {
+.co_main_descr {
+  margin-top: 10px;
+}
+.co_ledgend {
   display: inline-block;
   vertical-align: top;
   width: calc(50% - 20px);
+  margin-right: 10px;
+  padding-right: 10px;
+  border-right-style: solid;
+  border-right-color: rgb(217, 217, 217);
+  border-width: 1px;
 }
 .co_description {
   display: inline-block;
   vertical-align: top;
+  margin-left: 10px;
   width: calc(50% - 20px);
+}
+.co_container h5 {
+  margin: 0;
+  margin-bottom: 5px;
+  font-size: 18px;
 }
