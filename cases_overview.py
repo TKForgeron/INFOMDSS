@@ -5,6 +5,7 @@ from dash import html
 import plotly.express as px
 import pandas as pd
 import numpy as np
+import colors
 from dash.dependencies import Input, Output
 from datetime import datetime, timedelta
 import helpers
@@ -157,6 +158,7 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
 
         fig_il = px.line(self.dfs['il'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['il']['C1_School closing'], hover_data=['C1_School closing_hd'])
         fig_il.update_layout(showlegend=False)
+        fig_il.update_layout(margin=dict(r=0, t=0, l=20, b=20))
 
         fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nsw']['C1_School closing'], hover_data=['C1_School closing_hd'])
         fig_nsw.update_layout(showlegend=False)
@@ -185,12 +187,30 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
                         className="ov_cases_splitted",
                         children=[
                             html.Div(
-                                className="ov_cases_splitted_graph",
-                                children=[dcc.Graph(id="ov_cases_graph_il", figure=fig_il)]
+                                className="ov_cases_splitted_graph_outer",
+                                children=[
+                                    html.Div(
+                                        className="ov_cases_splitted_title_container",
+                                        children=[html.H4('Israel')]
+                                    ),
+                                    html.Div(
+                                        className="ov_cases_splitted_graph",
+                                        children=[dcc.Graph(id="ov_cases_graph_il", figure=fig_il)]
+                                    )
+                                ]
                             ),
                             html.Div(
-                                className="ov_cases_splitted_graph",
-                                children=[dcc.Graph(id="ov_cases_graph_nsw", figure=fig_nsw)]
+                                className="ov_cases_splitted_graph_outer",
+                                children=[
+                                    html.Div(
+                                        className="ov_cases_splitted_title_container",
+                                        children=[html.H4('New South Wales')]
+                                    ),
+                                    html.Div(
+                                        className="ov_cases_splitted_graph",
+                                        children=[dcc.Graph(id="ov_cases_graph_nsw", figure=fig_nsw)]
+                                    )
+                                ]
                             )
                         ]
                     )
@@ -250,18 +270,8 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
 
         none_color = np.array([200, 200, 200])
         none_color = '#%02x%02x%02x' % (none_color[0], none_color[1], none_color[2])
-        start_color = np.array([47, 47, 255])
-        end_color = np.array([247, 0, 0])
-        
-        vector = end_color - start_color
 
-        color_pallete = []
-
-        for n in range(0, levels):
-            color = start_color + (n / (levels - 1) * vector).astype(int)
-            color_pallete.append('#%02x%02x%02x' % (color[0], color[1], color[2]))
-
-
+        color_pallete = colors.create_color_list(levels)
         seq = 1
         pallete = []
         df = df.sort_values(['date', seq_name], ascending=(True, False))
@@ -286,11 +296,13 @@ Blank - no data ''', 'legend_items': ['0 - 20', '20 - 40', '40 - 60', '60 - 80',
 
         fig_il = px.line(self.dfs['il'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['il'][value], hover_data=[value + '_hd'])
         fig_il.update_layout(showlegend=False)
+        fig_il.update_layout(margin=dict(r=20, t=0, l=20, b=20), paper_bgcolor='rgb(251, 251, 251)', plot_bgcolor='rgb(251, 251, 251)')
         # print(self.colors['il'])
 
 
         fig_nsw = px.line(self.dfs['nsw'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nsw'][value], hover_data=[value + '_hd'])
         fig_nsw.update_layout(showlegend=False)
+        fig_nsw.update_layout(margin=dict(r=20, t=0, l=20, b=20), paper_bgcolor='rgb(251, 251, 251)', plot_bgcolor='rgb(251, 251, 251)')
         # if value == 'temp':
         # elif value == 'none':
         #     fig = px.line(self.data['cases_nl'], x="date", y="cases")
