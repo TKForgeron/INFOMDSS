@@ -2,7 +2,7 @@ import numpy as np
 from dash import html
 
 meaure_description = ['''
-    The current measures is overlaid on the graph is based on data tracked by the''', html.A('Oxford Covid-19 Government Response Tracker', href="https://github.com/OxCGRT/covid-policy-tracker"),]
+    The current policy which is overlaid on the graph is based on data tracked by the ''', html.A('Oxford Covid-19 Government Response Tracker', href="https://github.com/OxCGRT/covid-policy-tracker"),]
 
 strictness_description = ['''
 The stringency index ranges between 0 - 100 and indicates the combined strictness of the measures in a country. The higher the index value, the more stricter the measures. This stringency index is calculated by taking a weighted average of the following measures: School closing, Workplace closing, cancel public events, restrictions on gatherings, close public transport, stay at home requirements, restrictions on internal movement, international travel controls, and testing policy. This stringency index is provided by the

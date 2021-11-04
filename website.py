@@ -53,6 +53,7 @@ class Website:
         for c in self.callbacks:
             self.app.callback(c['output'], c['input'])(c['funct'])
         self.app.layout = html.Div(children=self.html)
+        self.app.title = 'DSS Dashboard'
         self.app.run_server(debug=True)
     
     def print_launch(self):
