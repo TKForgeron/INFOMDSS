@@ -153,7 +153,11 @@ class Cases_Overview(Website_Component):
                             html.H3('Cases'),
                             html.Hr()
                         ]),
-                    dcc.Dropdown(id='co_dropdown', options=dropdown_options,
+                    html.Div(
+                        className="dropdownLabel",
+                        children="Select variable to overlay on graphs:"
+                    ),
+                    dcc.Dropdown(id='co_dropdown', className="dropdown", options=dropdown_options,
                     value=dropdown_options[0]['value']),
                     html.Div(
                         className="co_main",
