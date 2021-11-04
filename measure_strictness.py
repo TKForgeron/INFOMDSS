@@ -22,7 +22,6 @@ class Measure_Strictness(Website_Component):
 
     def get_prediction_vars(self):
         prediction = self.data['prediction']
-        print(prediction)
         self.cur_level = round(prediction['stringency_nl_now'].values[0] / 100 * self.levels)
         self.predicted_level = round(prediction['stringency_prediction'].values[0] / 100 * self.levels)
 
