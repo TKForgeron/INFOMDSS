@@ -19,42 +19,39 @@ class Vaccinations_AgeGroup(Website_Component):
             html.Div(
                 className="container mb",
                 children=[
-                        html.Div(
-                        className="titleBar",
-                        children=[
-                            html.H3('Vaccinations Per Age Group'),
-                            html.Hr()
-                        ]),
-                        html.Div(
-                            className="co_main",
-                            children=dcc.Graph(id="cs_per_age_graph", className="legendstyle",figure={
-                                'data': agegroups(self),
-                                'layout': {
-                                    'plot_bgcolor': 'rgb(251, 251, 251)',
-                                    'hoverlabel': {
-                                        'bordercolor': 'rgb(229 229 229)',
-                                        'bgcolor': 'white',
-                                        'font': {
-                                            'font-family': 'acumin-pro, sans-serif',
-                                            'font-weight': '400',
-                                            'color': 'black'
-                                        }
-                                    },
-                                    'xaxis': {
-                                        'title': {'text': 'date'}
-                                    },
-                                    'yaxis': {'title': {'text': 'vaccination level'}},
-                                    'legend': {
-                                        'orientation': 'h',
-                                        'yanchor': 'center',
-                                        'y':'-0.3',
-                                        'xanchor':'top',
-                                        'x':'0'
+                    html.Div(
+                        className="co_main",
+                        children= [
+                            html.H4('Vaccinations Per Age Group'),
+                            dcc.Graph(id="cs_per_age_graph", className="legendstyle",figure={
+                            'data': agegroups(self),
+                            'layout': {
+                                'plot_bgcolor': 'rgb(251, 251, 251)',
+                                'hoverlabel': {
+                                    'bordercolor': 'rgb(229 229 229)',
+                                    'bgcolor': 'white',
+                                    'font': {
+                                        'font-family': 'acumin-pro, sans-serif',
+                                        'font-weight': '400',
+                                        'color': 'black'
                                     }
                                 },
+                                'xaxis': {
+                                    'title': {'text': 'date'}
+                                },
+                                'yaxis': {'title': {'text': 'vaccination level'}},
+                                'legend': {
+                                    'orientation': 'h',
+                                    'yanchor': 'center',
+                                    'y':'-0.3',
+                                    'xanchor':'top',
+                                    'x':'0'
+                                }
+                            },
                             },
                             config={ 'staticPlot': False })
-                        ),
+                        ]
+                    )
             ]
         )]
 
