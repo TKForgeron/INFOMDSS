@@ -14,19 +14,19 @@ import helpers
 
 app = dash.Dash(__name__)
 
-cases_il = pd.read_csv("data/Israel/geographic-sum-per-day-ver_00536_DS4.csv")
-cases_il = cases.get_cases_df_il(cases_il, months=1)
+cases_il = pd.read_csv("data/Israel/Israel_COVIDandVaccinated/geographic-sum-per-day-ver_00536_DS4.csv")
+cases_il = cases.get_cases_df_il()
 
 vaccinations_il = pd.read_csv("data/Israel/vaccinated_city_table_ver_00218_DS5.csv")
-vaccinations_il = vaccinations.get_vaccinations_df_il(vaccinations_il, months=1)
+vaccinations_il = vaccinations.get_vaccinations_df_il()
 
 cases_nsw = pd.read_csv("data/NSW/confirmed_cases_table2_age_group_DS6.csv")
-cases_nsw = cases.get_cases_df_nsw(cases_nsw, months=1)
+cases_nsw = cases.get_cases_df_nsw()
 
 cases_nl = pd.read_csv(
     "data/Netherlands/COVID-19_aantallen_gemeente_per_dag.csv", sep=";"
 )
-cases_nl = cases.get_cases_df_nl(cases_nl, months=1)
+cases_nl = cases.get_cases_df_nl()
 
 fig_nl = px.line(cases_nl, x="date", y="cases")
 fig_nsw = px.line(cases_nsw, x="date", y="cases")
