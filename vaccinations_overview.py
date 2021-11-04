@@ -106,7 +106,7 @@ class Vaccinations_Overview(Website_Component):
         ]
 
     def create_ledgend(self, legend_items: str, colors: list ):
-        html_items = [html.H5('Ledgend') ]
+        html_items = [html.H5('Legend') ]
         for i, c in enumerate(colors):
             label = 'None'
             if (i < len(legend_items)):

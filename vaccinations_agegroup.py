@@ -17,7 +17,7 @@ class Vaccinations_AgeGroup(Website_Component):
     def get_html(self):
         return [
             html.Div(
-                className="container",
+                className="container mb",
                 children=[
                         html.Div(
                         className="titleBar",
@@ -26,10 +26,11 @@ class Vaccinations_AgeGroup(Website_Component):
                             html.Hr()
                         ]),
                         html.Div(
+                            className="co_main",
                             children=dcc.Graph(id="cs_per_age_graph", className="legendstyle",figure={
                                 'data': agegroups(self),
                                 'layout': {
-                                    'plot_bgcolor': 'rgba(255, 255, 255, 0)',
+                                    'plot_bgcolor': 'rgb(251, 251, 251)',
                                     'hoverlabel': {
                                         'bordercolor': 'rgb(229 229 229)',
                                         'bgcolor': 'white',

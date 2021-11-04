@@ -185,9 +185,17 @@ h4 {
 .situationBox .js-line {
   stroke: #006EFE !important;
 }
-
+.mb {
+  padding-bottom: 40px;
+  margin-bottom: 40px;
+}
 #cs_per_age_graph {
   padding-bottom: 60px;
+  margin-top: 0;
+  margin-bottom: -40px;
+}
+#cs_per_age_graph .main-svg {
+  background-color: transparent !important;
 }
 .legendstyle .legendlines path.js-line {
   stroke-width: 6px !important;
@@ -268,6 +276,7 @@ h4 {
 
 .ledgend_color {
   position: absolute;
+  border-radius: 8px;
   top: 0;
   left: 0;
   bottom: 0;
@@ -302,6 +311,13 @@ h4 {
   margin: 0;
   margin-bottom: 5px;
   font-size: 18px;
+}
+#ms_strictness_graph .legend {
+  transform: translate(458px,425px) !important;
+}
+#ms_strictness_graph .legendtitletext {
+  display: none;
+  opacity: 0;
 }
 .ms_strictness_container {
   display: inline-block;
@@ -395,4 +411,8 @@ h4 {
 .ms_container_right p {
   margin-top: 5px;
   font-weight: 300;
-  }
+}
+.dropdownLabel {
+  font-size: 13px;
+  margin-bottom: 7px;
+}
