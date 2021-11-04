@@ -188,10 +188,11 @@ h4 {
 .mb {
   padding-bottom: 40px;
   margin-bottom: 40px;
+  margin-top: -60px;
 }
 #cs_per_age_graph {
   padding-bottom: 60px;
-  margin-top: 0;
+  margin-top: -80px;
   margin-bottom: -40px;
 }
 #cs_per_age_graph .main-svg {
@@ -308,9 +309,22 @@ h4 {
   width: calc(50% - 20px);
 }
 .co_container h5 {
-  margin: 0;
-  margin-bottom: 5px;
-  font-size: 18px;
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+.co_container a {
+  color: #00C678;
+}
+.co_ledgend h5 {
+  margin-bottom: 10px;
+}
+.ledgend_label {
+  font-weight: 300;
+}
+#co_description, .co_description {
+  font-weight: 300;
 }
 #ms_strictness_graph .legend {
   transform: translate(458px,425px) !important;
@@ -418,4 +432,30 @@ h4 {
   margin-bottom: 2px;
   font-size: 13px;
   margin-bottom: 7px;
+}
+
+.projectdetails {
+  padding-bottom: 50px;
+  margin-bottom: 90px;
+}
+.projectdetails h2 {
+  margin-bottom: 14px;
+}
+.projectdetails p {
+  font-size: 14px;
+
+  color: #5e5e5e;
+  margin: 0px;
+}
+.projectdetails img {
+  width: 110px;
+  text-align: center;
+  margin: auto;
+  display: block;
+  opacity: 0.7;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 80px;
+  margin-bottom: 50px;
 }

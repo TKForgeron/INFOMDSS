@@ -45,8 +45,29 @@ class Website:
 
         self.callbacks = callbacks
         self.html = html.Div(
-            className="pageContainer",
-            children=allHtml
+            className="pageWrapper",
+            children=[
+                html.Div(
+                    className="pageContainer",
+                    children=allHtml
+                ),
+                html.Div(
+                    className="pageContainer",
+                    children=[
+                        html.Div(
+                            className="container projectdetails",
+                            children=[
+                                html.H2("About this Dashboard"),
+                                html.P("This dashboard was developed as part of a project for Data Science & Society, | Master Business Informatics, Utrecht University."),
+                                html.P("Arthur Zylinski (0872377), Tim Smit (6527906), Matthijs Blaauw (4925653)"),
+                                html.P("Kouros Pechlivanidis (6527450), Max de Froe (4496655), Martijn Jansen (6457827)"),
+                                html.P("For details and more information please visit the project report."),
+                                html.Img(src="assets/images/uulogo.svg")
+                            ]
+                        )
+                    ]
+                )
+            ]
         )
 
     def run_website(self, allHtml):

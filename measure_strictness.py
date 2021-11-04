@@ -96,7 +96,7 @@ class Measure_Strictness(Website_Component):
                                     html.Div(
                                         children = [
                                             html.H5('Information'),
-                                            html.P('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh ligula, consectetur ut erat et, rhoncus iaculis purus. Pellentesque iaculis laoreet vulputate.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nibh ligula, consectetur ut erat et, rhoncus iaculis purus. Pellentesque iaculis laoreet vulputate.')
+                                            html.P('The stringency index ranges between 0 - 100 and indicates the combined strictness of the measures in a country. The higher the index value, the stricter the measures. The model is trained to output a prediction consistent with a synthesis of Dutch, Australian, and Israeli government policies in the past. The algorithm takes in the current data to give an indication on whether it is advisable to increase or decrease stringency policies.')
                                         ]
                                     )
                                 ]
