@@ -396,3 +396,8 @@ h4 {
   margin-top: 5px;
   font-weight: 300;
   }
+.dropdownLabel {
+  font-weight: 600;
+  margin-top: -10px;
+  margin-bottom: 2px;
+}
