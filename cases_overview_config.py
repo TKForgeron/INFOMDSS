@@ -192,7 +192,7 @@ keys = [
         'key_name': 'H6_Facial Coverings',
         'value_range': [0, 4], 'steps': None,
         'colors': 'norm',
-        'label': 'Protection of elderly people',
+        'label': 'Facial Coverings',
         'labels_desc':
             '''0 - No policy
             1 - Recommended
