@@ -108,7 +108,7 @@ class Cases_Overview(Website_Component):
         ]
 
     def create_ledgend(self, legend_items: str, colors: list ):
-        html_items = [html.H5('Ledgend') ]
+        html_items = [html.H5('Legend') ]
         for i, c in enumerate(colors):
             label = 'None'
             if (i < len(legend_items)):
@@ -295,7 +295,6 @@ class Cases_Overview(Website_Component):
         fig.update_layout(margin=dict(r=20, t=0, l=20, b=20), paper_bgcolor='rgb(251, 251, 251)', plot_bgcolor='rgb(251, 251, 251)')
         fig.update_xaxes(gridcolor='rgb(217, 217, 217)')
         fig.update_yaxes(gridcolor='rgb(217, 217, 217)')
-
 
     def on_dropdown_change(self, value):
         fig = px.line(self.dfs['nl'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nl'][value], hover_data=[value + '_hd'])
