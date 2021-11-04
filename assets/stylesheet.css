@@ -422,6 +422,9 @@ h4 {
   margin-bottom: 0px;
   margin-top: 0px;
 }
+.ms_container_right a {
+  color: #00C678;
+}
 .ms_container_right p {
   margin-top: 5px;
   font-weight: 300;
@@ -443,7 +446,6 @@ h4 {
 }
 .projectdetails p {
   font-size: 14px;
-
   color: #5e5e5e;
   margin: 0px;
 }
