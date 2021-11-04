@@ -19,6 +19,11 @@ class Website:
         no_cache = False
         if ('-oc' in args or '--overwrite-cache' in args):
             no_cache = True
+        self.host = '0.0.0.0'
+        self.debug = False
+        if ('-dev' in args or '--debug' in args):
+            self.ip = '127.0.0.1'
+            self.debug = True
         self.data = Data_Importer(no_cache=no_cache).get_data()
         self.app = dash.Dash(__name__)
         self.get_html()
@@ -75,7 +80,7 @@ class Website:
             self.app.callback(c['output'], c['input'])(c['funct'])
         self.app.layout = html.Div(children=self.html)
         self.app.title = 'DSS Dashboard'
-        self.app.run_server(debug=True)
+        self.app.run_server(debug=self.debug, host=self.host)
     
     def print_launch(self):
         print('|------------------------------------------------|')
