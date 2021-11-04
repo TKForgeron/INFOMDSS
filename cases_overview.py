@@ -176,7 +176,7 @@ class Cases_Overview(Website_Component):
                                     html.Div(
                                         id="co_description",
                                         className="co_description",
-                                        children=[html.H5('Description'), self.keys[0]['description']]
+                                        children=[html.H5('Description')] + self.keys[0]['description']
                                     )
                                 ]
                             )
@@ -308,7 +308,7 @@ class Cases_Overview(Website_Component):
         self.style_fig(fig_nsw)
 
         key = find_in_list(self.keys, lambda i: i['key_name'] == value)
-        return fig, fig_il, fig_nsw, self.create_ledgend(key['legend_items'], self.colors_list['nl'][value]), [html.H5('Description'), key['description']]
+        return fig, fig_il, fig_nsw, self.create_ledgend(key['legend_items'], self.colors_list['nl'][value]), [html.H5('Description')] + key['description']
 
 def find_in_list(list: list, function):
     for item in list:
