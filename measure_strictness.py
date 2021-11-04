@@ -13,6 +13,7 @@ USE_DATA = [
     'prediction'
 ]
 
+
 class Measure_Strictness(Website_Component):
     def __init__(self, data):
         self.store_required_data(data, USE_DATA, start_date=None)
@@ -64,7 +65,7 @@ class Measure_Strictness(Website_Component):
                                                     ),
                                                     html.Div(
                                                         className="ms_strictness_count",
-                                                        children=str(self.cur_level)
+                                                        children=self.get_label_of_level(self.cur_level)
                                                     )
                                                 ]
                                             ),
@@ -77,7 +78,7 @@ class Measure_Strictness(Website_Component):
                                                     ),
                                                     html.Div(
                                                         className="ms_strictness_count",
-                                                        children=str(self.predicted_level)
+                                                        children=self.get_label_of_level(self.predicted_level)
                                                     )
                                                 ]
                                             ),
@@ -104,6 +105,10 @@ class Measure_Strictness(Website_Component):
                     )
                 ])    
         ]
+
+    def get_label_of_level(self, level):
+        return str(level * self.levels) + '-' + str((level + 1) * self.levels)
+
     def style_fig(self, fig):
         fig.update_layout(showlegend=False)
         fig.update_layout(margin=dict(r=20, t=0, l=20, b=20), paper_bgcolor='rgb(251, 251, 251)', plot_bgcolor='rgb(251, 251, 251)')

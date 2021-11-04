@@ -145,6 +145,10 @@ class Vaccinations_Overview(Website_Component):
                             html.H3('Vaccinations'),
                             html.Hr()
                         ]),
+                    html.Div(
+                        className="dropdownLabel",
+                        children="Select variable to overlay on graphs:"
+                    ),
                     dcc.Dropdown(id='vo_dropdown', options=dropdown_options,
                     value=dropdown_options[0]['value']),
                     html.Div(
