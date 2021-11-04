@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 import helpers
 from website_component import Website_Component
 import math
-import cases_overview_config as config
+import vaccination_overview_config as config
 
 USE_DATA = [
     'vaccinations_nl',
@@ -129,7 +129,7 @@ class Vaccinations_Overview(Website_Component):
         return html_items
 
     def get_html(self):
-        fig = px.line(self.dfs['nl'], x="date", y="vaccinations", color="C1_School closing_seq", color_discrete_sequence=self.colors['nl']['C1_School closing'], hover_data=['C1_School closing_hd'])
+        fig = px.line(self.dfs['nl'], x="date", y="vaccinations", color="H7_Vaccination policy_seq", color_discrete_sequence=self.colors['nl']['H7_Vaccination policy'], hover_data=['H7_Vaccination policy_hd'])
         fig.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
         fig.update_xaxes(showgrid=False)
         fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightPink')
@@ -168,7 +168,7 @@ class Vaccinations_Overview(Website_Component):
                                     html.Div(
                                         id="vo_description",
                                         className="co_description",
-                                        children=[html.H5('Description'), self.keys[0]['description']]
+                                        children=[html.H5('Description')] + self.keys[0]['description']
                                     )
                                 ]
                             )
@@ -262,7 +262,7 @@ class Vaccinations_Overview(Website_Component):
         self.style_fig(fig)
 
         key = find_in_list(self.keys, lambda i: i['key_name'] == value)
-        return fig, self.create_ledgend(key['legend_items'], self.colors_list['nl'][value]), [html.H5('Description'), key['description']]
+        return fig, self.create_ledgend(key['legend_items'], self.colors_list['nl'][value]), [html.H5('Description')] + key['description']
 
 def find_in_list(list: list, function):
     for item in list:

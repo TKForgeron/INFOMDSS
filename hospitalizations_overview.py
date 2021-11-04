@@ -160,7 +160,7 @@ class Hospitalizations_Overview(Website_Component):
                                     html.Div(
                                         id="ho_description",
                                         className="co_description",
-                                        children=[html.H5('Description'), self.keys[0]['description']]
+                                        children=[html.H5('Description')] + self.keys[0]['description']
                                     )
                                 ]
                             )
@@ -255,8 +255,7 @@ class Hospitalizations_Overview(Website_Component):
         self.style_fig(fig)
 
         key = find_in_list(self.keys, lambda i: i['key_name'] == value)
-        return fig, self.create_ledgend(key['legend_items'], self.colors_list['nl'][value]), [html.H5('Description'), key['description']]
-
+        return fig, self.create_ledgend(key['legend_items'], self.colors_list['nl'][value]), [html.H5('Description')] + key['description']
 def find_in_list(list: list, function):
     for item in list:
         if (function(item)): return item
