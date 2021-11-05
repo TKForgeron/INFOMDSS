@@ -35,5 +35,15 @@ run_website.py can be called with some arguments:
 - `-oc` or `--overwrite-cache`: Force the fetching of new data, and train all models again.
 - `-dev` or `--debug`: Run the website locally (host on 127.0.0.1 instead of 0.0.0.0), and enable the Debug tools provided by Dash
 
-# Additional info
+## Additional info
 The system caches data for 6000 seconds, which can help very much to speed up loading (few seconds vs. multible minutes). The files will be downloaded in the `./cache` folder
+
+## Used libraries / Tools
+- [**Dash**](https://github.com/plotly/dash) (version 2.0.0): MIT License
+- [**Pandas**](https://github.com/pandas-dev/pandas) (version 1.3.4): BSD-3-Clause License
+- [**NumPy**](https://github.com/numpy/numpy) (version 1.21.2): BSD-3-Clause License
+- [**plotly.py**](https://github.com/plotly/plotly.py) (version 5.3.1): MIT License
+- [**Matplotlib**](https://github.com/matplotlib/matplotlib) (version 3.4.3): [license](https://github.com/matplotlib/matplotlib/blob/main/LICENSE/LICENSE) (only for development)
+- [**Statsmodels**](https://github.com/statsmodels/statsmodels) (version 0.13.3): BSD-3-Clause License
+- [**Seoborn**](https://github.com/mwaskom/seaborn) (version 0.11.2): BSD-3-Clause License (only for development)
+- [**scikit-learn**](https://github.com/scikit-learn/scikit-learn) (version 1.0.1): BSD-3-Clause License
