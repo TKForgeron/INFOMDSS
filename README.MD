@@ -13,8 +13,9 @@ Afterwards you can view the dashboard on localhost (port 80)
 **Please note:** The system import data, cleans data and trains models when launching the application. This takes approximetely 5 miuntes.
 
 ---
-# Code documentation
+## Code documentation
 The codebase can be devided in to two types of code:
+
 **Data processing:** `helpers.py`, `hospitalizations.py`, `measures.py`, `populations.py`, `predictions.py`, `preprocessing_predictions.py`, `temperature.py`, `time_series_prediction.py`, `vaccinations.py`
 **Dashboard**:
 - **Parts of the website (in order of appearance)**: `header.py`, `current_situation.py`, `cases_overview.py`, `hospitalizations_overview.py`, `vaccinations_overview.py`, `vaccinations_agegroup.py`
