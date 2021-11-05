@@ -186,7 +186,7 @@ class CurrentSituation(Website_Component):
                                 className="fiveGrid cs_graph",
                                 children=dcc.Graph(id="cs_vac_graph", className="cs_graph", figure={
                                     'data': [
-                                        { 'x': self.data['vaccinations_nl']['date'], 'y': self.data['vaccinations_nl']['vaccinations'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '<b>%{y} Cases</b><extra></extra>' }
+                                        { 'x': self.data['vaccinations_nl']['date'], 'y': self.data['vaccinations_nl']['vaccinations'], 'type': 'line',  'marker': {'symbol': 'circle'}, 'hovertemplate': '<b>%{y} Vaccinations</b><extra></extra>' }
                                     ],
                                     'layout': {
                                         'xaxis': { 'showgrid': False, 'zeroline': False, 'visible': False, 'showticklabels': False },
