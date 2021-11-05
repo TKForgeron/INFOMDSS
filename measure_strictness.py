@@ -112,6 +112,8 @@ class Measure_Strictness(Website_Component):
 
     def style_fig(self, fig):
         fig.update_layout(legend_orientation="h")
+        fig.update_layout(hovermode="x")
+        # fig.update_traces(mode="markers+lines", hovertemplate=None)
         fig.update_layout(margin=dict(r=20, t=0, l=20, b=20), paper_bgcolor='rgb(251, 251, 251)', plot_bgcolor='rgb(251, 251, 251)')
         fig.update_xaxes(gridcolor='rgb(217, 217, 217)')
         fig.update_yaxes(gridcolor='rgb(217, 217, 217)')
