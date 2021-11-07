@@ -1,5 +1,4 @@
 from os import sep
-import dash
 from dash import dcc
 from dash import html
 import plotly.express as px
@@ -8,7 +7,6 @@ import numpy as np
 import colors
 from dash.dependencies import Input, Output
 from datetime import datetime, timedelta
-import helpers
 from website_component import Website_Component
 import math
 import cases_overview_config as config
@@ -21,21 +19,22 @@ USE_DATA = [
     'temperature_nl',
     'temperature_nsw',
     'temperature_il'
-]
+] # Defines wich df to load for this component
 
 class Cases_Overview(Website_Component):
     def __init__(self, data, app):
         self.store_required_data(data, USE_DATA)
         self.app = app
         self.traces = {}
-
         self.set_limmit_data_range()
-        self.keys = config.keys
-        self.preprocess_keys()
+        self.keys = config.keys # The Keys config has data on what keys to use for overaying data on the graphs 
+        self.preprocess_keys() # process the keys described above
         self.dfs, self.colors, self.colors_list = self.create_dfs()
 
     def set_limmit_data_range(self):
-        # limit range of IL and NSW
+        """
+            Limits the range of cases_il and cases_nsw to only the last 100 days.
+        """
         days_to_show = 100
         start_date = datetime.today() - timedelta(days=days_to_show)
         self.data['cases_il'] = self.data['cases_il'][self.data['cases_il']['date'] > start_date]
@@ -45,11 +44,35 @@ class Cases_Overview(Website_Component):
         self.keys = list(map(self.preporcess_key, self.keys))
 
     def preporcess_key(self, key: dict) -> dict:
+        """
+            Convert the legend_items text field to an array that is used to make a nice legend.
+        """
         if not 'legend_items' in key:
             key['legend_items'] = list(map(lambda l: l.split('- ')[1], key['labels_desc'].split('\n')))
         return key
 
     def create_dfs(self):
+        """
+            This function prepares the dataframes according to the configuration imported in the __init__() function.
+            Changing the countries array you can add extra countries if the data is available in the self.data dict
+            For each key the data is processes. If 'bins' is provided in the dict it converts the data to the corresponding bins
+            if 'steps' is povided it will devided the value in to a certain number of levels difined in 'steps'. If not it will just assume
+            values are integers between the data provided in 'value_range'
+
+            The graph(s) overlay a certain variable, where which is implemented as follows: Each color change is a new line, so not all the same colors are the same line
+            when the overlaid variable changes it is a new line indicated by the (key + _seq) column in the dataframe. We need to override the colors plotly wants to assign them.
+            The function therefore returns color_palletes which is a list for all different valies that _seq can take and has the colors corresponding the the original level.
+
+            Added columns for each key to the dataframe:
+            (1) key + _seq: Is the sequence number that increases everytime that value changes
+            (2) key: This column might be altered if requested by the config (e.g. converting it to bins or steps)
+            (3) key + '_hd': Is the data also shown when hovering the graph and is the original value of the metric.
+
+            It returns three variables.
+            (1) The dataframes for each country each with all the keys in the config
+            (2) The color pallete containing a list with a color for each sequencie
+            (3) The unqiue colors in the graph (ordered)
+        """
         dfs = {}
         color_palletes = {}
         color_lists = {}
@@ -102,12 +125,17 @@ class Cases_Overview(Website_Component):
 
 
     def get_callbacks(self):
-        # used by Website() to get callbacks
+        """
+            used by Website() to get callbacks
+        """
         return [
             { 'output': [Output('ov_cases_graph', 'figure'), Output('ov_cases_graph_il', 'figure'), Output('ov_cases_graph_nsw', 'figure'), Output('co_ledgend', 'children'),  Output('co_description', 'children')], 'input': Input('co_dropdown', 'value'), 'funct': self.on_dropdown_change}
         ]
 
     def create_ledgend(self, legend_items: str, colors: list ):
+        """
+            Creates a HTML ledgend based on legend_items, and colors.
+        """
         html_items = [html.H5('Legend') ]
         for i, c in enumerate(colors):
             label = 'None'
@@ -131,6 +159,9 @@ class Cases_Overview(Website_Component):
         return html_items
 
     def get_html(self):
+        """
+            Creates the HTML for this element
+        """
         fig = px.line(self.dfs['nl'], x="date", y="cases", color="C1_School closing_seq", color_discrete_sequence=self.colors['nl']['C1_School closing'], hover_data=['C1_School closing_hd'])
         fig.update_layout(showlegend=False, paper_bgcolor="#fff", plot_bgcolor="#ffffff")
         fig.update_xaxes(showgrid=False)
@@ -220,6 +251,14 @@ class Cases_Overview(Website_Component):
         )]
 
     def create_seq(self, df, col: str, seq_name: str):
+        """
+            This function takes a DF and creates the column named 'seq_name' by looking at the value in column 'col'. If that value changes
+            it increments this value. In order to ensure a conitues line when plotting the graph a row is diplicated once the seq changes
+            and takes the value of the previous seq value. 
+
+            Bc the plot relies on using different lines for all different sequences it doesn't link the lines if we don't duplicate certain values.
+            (Since there is no line with values between the dates where the value changes)
+        """
         bu_df = df.copy()
         bu_df[seq_name] = np.nan
         df[seq_name] = (df[col] != df[col].shift(1)).cumsum()
@@ -238,35 +277,14 @@ class Cases_Overview(Website_Component):
         df["date"] = pd.to_datetime(df["date"])
         return df
     
-    def create_cases_measures_df(self) -> pd.DataFrame:
-        cases = self.data['cases_nl']
-        measures = self.data['measures']
-        measures = measures[measures['CountryCode'] == 'NLD']
-        merged = pd.merge(cases, measures, left_on='date', right_on='date', how='left')
-        merged = merged.rename(columns={ 'cases_x': 'cases' })
-        merged = merged[['date', 'StringencyIndex', 'cases']]
-        merged['strictness'] = np.floor(merged['StringencyIndex'] / 100 * 5)
-
-        merged = self.create_seq(merged, 'strictness', 'measure_seq')
-
-        return merged
-
-    def create_cases_temperature_df(self) -> pd.DataFrame:
-        cases = self.data['cases_nl']
-        measures = self.data['temperature_nl']
-
-        merged = pd.merge(cases, measures, left_on='date', right_on='date', how='left')
-
-        bins = [-np.inf, 0, 10, 20, 30, np.inf]
-        names = [1, 2, 3, 4, 5]
-        
-        merged['temp_cat'] = pd.cut(merged['temp'], bins, labels=names)
-
-        merged = self.create_seq(merged, 'temp_cat', 'temp_seq')
-        return merged
-
     def get_colors_pallete(self, df: pd.DataFrame, col: str, levels: int, seq_name: str) -> list:
-        # this funciton assumes one col to be available named seq
+        """
+            This function takes a df and looks assigns a color to it based on the value of the col names 'col'.
+            It does this by taking the last value of rows where col names 'seq_name' is of the sequence value.
+            The sequence value starts at 1 and runs untill it can't find any rows with that sequence.
+            The system furthermore creates the color pallete based on the color module. it uses the 'levels' argument for this
+            'levels' is how about how many values the 'col' column can take.
+        """
 
         none_color = np.array([200, 200, 200])
         none_color = '#%02x%02x%02x' % (none_color[0], none_color[1], none_color[2])
@@ -291,12 +309,18 @@ class Cases_Overview(Website_Component):
         return pallete, color_pallete
 
     def style_fig(self, fig):
+        """
+            Styling
+        """
         fig.update_layout(showlegend=False)
         fig.update_layout(margin=dict(r=20, t=0, l=20, b=20), paper_bgcolor='rgb(251, 251, 251)', plot_bgcolor='rgb(251, 251, 251)')
         fig.update_xaxes(gridcolor='rgb(217, 217, 217)')
         fig.update_yaxes(gridcolor='rgb(217, 217, 217)')
 
     def on_dropdown_change(self, value):
+        """
+            This function is called by dash everytime the dropdown changes. It plots the corresponding graph from the self.dfs value.
+        """
         fig = px.line(self.dfs['nl'], x="date", y="cases", color=value + "_seq", color_discrete_sequence=self.colors['nl'][value], hover_data=[value + '_hd'])
         self.style_fig(fig)
 

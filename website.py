@@ -1,4 +1,8 @@
+# Libraries
 import dash
+from dash import html
+
+# Website components:
 from header import Header
 from current_situation import CurrentSituation
 from cases_overview import Cases_Overview
@@ -6,9 +10,6 @@ from hospitalizations_overview import Hospitalizations_Overview
 from vaccinations_agegroup import Vaccinations_AgeGroup
 from measure_strictness import Measure_Strictness
 from vaccinations_overview import Vaccinations_Overview
-from dash import dcc
-from dash import html
-import sys
 from data_importer import Data_Importer
 
 
@@ -24,31 +25,39 @@ class Website:
         if ('-dev' in args or '--debug' in args):
             self.ip = '127.0.0.1'
             self.debug = True
-        self.data = Data_Importer(no_cache=no_cache).get_data()
+        self.data = Data_Importer(no_cache=no_cache).get_data() # Gets the data
         self.app = dash.Dash(__name__)
-        self.get_html()
+        self.get_html() # populates the self.html
         self.run_website(html)
 
 
     def get_html(self):
+        # Also retrieves callbacks
         allHtml = []
         callbacks = []
+
         allHtml = allHtml + Header().get_html()
+
         allHtml = allHtml + CurrentSituation(self.data).get_html()
-        # self.data['measures'].to_csv('test_j.csv')
+
         allHtml = allHtml + Measure_Strictness(self.data).get_html()
+
         cases_overview = Cases_Overview(self.data, self.app)
         callbacks = callbacks + cases_overview.get_callbacks()
         allHtml = allHtml + cases_overview.get_html()
+
         hospitalization_overview = Hospitalizations_Overview(self.data, self.app)
         callbacks = callbacks + hospitalization_overview.get_callbacks()
         allHtml = allHtml + hospitalization_overview.get_html()
+
         vaccinations_overview = Vaccinations_Overview(self.data, self.app)
         callbacks = callbacks + vaccinations_overview.get_callbacks()
         allHtml = allHtml + vaccinations_overview.get_html()
+
         allHtml = allHtml + Vaccinations_AgeGroup(self.data).get_html()
 
         self.callbacks = callbacks
+        
         self.html = html.Div(
             className="pageWrapper",
             children=[
@@ -75,7 +84,7 @@ class Website:
             ]
         )
 
-    def run_website(self, allHtml):
+    def run_website(self):
         for c in self.callbacks:
             self.app.callback(c['output'], c['input'])(c['funct'])
         self.app.layout = html.Div(children=self.html)

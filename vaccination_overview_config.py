@@ -1,33 +1,40 @@
+# Configuration for vaccination_overview. See first item for explanation.
+
 import numpy as np
 from dash import html
 
+# \/ Description for all keys which are based on one measure
 meaure_description = ['''
     The current policy which is overlaid on the graph is based on data tracked by the ''', html.A('Oxford Covid-19 Government Response Tracker', href="https://github.com/OxCGRT/covid-policy-tracker"),]
 
+# \/ Description the strictness key
 strictness_description = ['''
 The stringency index ranges between 0 - 100 and indicates the combined strictness of the measures in a country. The higher the index value, the more stricter the measures. This stringency index is provided by the 
 ''', html.A('Oxford Covid-19 Government Response Tracker', href="https://github.com/OxCGRT/covid-policy-tracker"), ' project']
 
+# \/ Description the temperature key
 temp_description = ['''
     Overlaid on the graph is the average temperature for each day.
 ''']
 
 keys = [
     {
-    'key_name': 'H7_Vaccination policy',
-    'value_range': [0, 5],
-    'steps': None,
-    'colors': 'norm',
-    'label': 'Vaccination policy',
+    'key_name': 'H7_Vaccination policy', # The keyname of the column in the dataframe 
+    'value_range': [0, 5], # The range of the values in this column
+    'steps': None, # If provided it will convert values between value_range to the number of steps defined in this variable
+    'bins': None, # If provided it will convert the value to the bins provided here
+    'colors': 'norm', # Set the color scheme (not implemented)
+    'label': 'Vaccination policy', # The label used to show it in the user interface
     'labels_desc':
         ''' 0 - No availability
             1 - Availability for ONE of following: key workers/ clinically vulnerable groups (non elderly) / elderly groups
             2 - Availability for TWO of following: key workers/ clinically vulnerable groups (non elderly) / elderly groups
             3 - Availability for ALL of following: key workers/ clinically vulnerable groups (non elderly) / elderly groups
             4 - Availability for all three plus partial additional availability (select broad groups/ages)
-            5 - Universal availability ''',
-    'data_type': 'measures',
-    'description': meaure_description
+            5 - Universal availability ''', # The description of the labels, which will automaticly be converted to a list.
+            # this is done bc the data's original form is a text just like this one
+    'data_type': 'measures', # which type of data it is. (decides where the function searches for the key_name)
+    'description': meaure_description # Description shown in the interface
     },
     {
         'key_name': 'StringencyIndex',

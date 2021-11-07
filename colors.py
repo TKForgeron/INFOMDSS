@@ -1,6 +1,10 @@
 import numpy as np
 
 def create_color_list(levels: int) -> list:
+    """
+        Creates a list of colors that are in the garadient between start_color and end_color.
+        It returns 'levels' numbers of colors
+    """
     start_color = np.array([47, 47, 255])
     end_color = np.array([247, 0, 0])
     

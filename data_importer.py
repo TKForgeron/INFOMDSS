@@ -1,3 +1,9 @@
+"""
+    This is a caching engine used in development, making sure that if you restart the webserver it doens't have to load and train all models again.
+"""
+
+
+
 import cases
 import vaccinations
 import hospitalizations
@@ -15,15 +21,18 @@ class Data_Importer:
     def __init__(self, no_cache:bool=False):
         self.data = {}
         self.overwrite_cache = no_cache
-        self.progress = 0
-        self.max_progress = 25
+        self.progress = 0 # used in self.update_progress()
+        self.max_progress = 250 # used in self.update_progress()
     
     def get_data(self):
-        loaded_from_cache = self.check_cache()
-        if (self.overwrite_cache):
+        """
+            Calls all modules and stores them the self.data
+        """
+        loaded_from_cache = self.check_cache() # Check if there is data we can load from the case
+        if (self.overwrite_cache): # Manual overwrite
             print('Cache overwrite enabled, downloading new data...')
         else: 
-            if (loaded_from_cache):
+            if (loaded_from_cache): 
                 print('Loaded data succesfully from cache')
                 return self.data
             print('Unable to load data from cache, downloading new!')
@@ -73,6 +82,9 @@ class Data_Importer:
         return self.data
 
     def check_cache(self):
+        """
+            Checks if the data is not yet expired (using timestamp.txt), and if the cache folder is even available.
+        """
         load_from_cache = None
         try:
             f = open('./cache/timestamp.txt')
@@ -86,12 +98,19 @@ class Data_Importer:
         return True
 
     def load_cache(self):
+        """
+            loads all files with their names in the cache folder. No checking is done. All files that are not timestamp.txt are imported as pickle files,
+            and loaded with the name as their file name
+        """
         files = os.listdir('./cache')
         for f in files:
             if (f == 'timestamp.txt'): continue
             self.data[f.split('.')[0]] = pd.read_pickle('./cache/' + f)
 
     def write_cache(self):
+        """
+            Write the cache in ./cache/ as pickle files. These files make sure the datatypes are untouched compared to .csv
+        """
         self.clear_cache()
         os.mkdir('./cache')
         for key in self.data:
@@ -100,6 +119,9 @@ class Data_Importer:
             f.write(str(int(time.time())))
 
     def clear_cache(self):
+        """
+            Removes the ./cache folder
+        """
         try:
             files = os.listdir('./cache')
         except:
@@ -109,6 +131,9 @@ class Data_Importer:
         os.rmdir('./cache')
 
     def update_progress(self):
+        """
+            Updates the progress of loading the data. Uses variables defined in __init__
+        """
         self.progress += 1
         finishedPart = int(self.progress / self.max_progress * 100 / 2)
         if (self.progress == 100): 

@@ -1,10 +1,7 @@
 import pandas as pd
 import requests
 from datetime import datetime
-import json
-from zipfile import ZipFile
 from io import BytesIO
-import urllib.request as urllib2
 
 
 def get_temperatures_df_il(start_date: datetime = None) -> pd.DataFrame:

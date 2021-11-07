@@ -1,6 +1,5 @@
 import pandas as pd
 from matplotlib import pyplot
-import statsmodels as sm
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from statsmodels.tsa.arima_model import ARIMA

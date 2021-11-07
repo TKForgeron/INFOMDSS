@@ -1,3 +1,5 @@
+# This is the component on which is the base of all other website components. The function allows each component to store the chosen data to the self.data dict
+
 from datetime import datetime
 
 
@@ -6,7 +8,7 @@ class Website_Component:
         pass
 
     def store_required_data(self, data: dict, keys: list, start_date: datetime=None):
-        # Data is a dict of df's
+        # Data is a dict of full df's
         self.data = {}
         for k in keys:
             if start_date:

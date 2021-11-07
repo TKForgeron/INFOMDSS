@@ -1,9 +1,6 @@
 from os import sep
-import dash
 from dash import dcc
 from dash import html
-import plotly.express as px
-import pandas as pd
 from datetime import datetime, timedelta
 import helpers
 from website_component import Website_Component
@@ -18,14 +15,18 @@ USE_DATA = [
     'cases_nl',
     'cases_il',
     'cases_nsw'
-]
+] # Defines wich df to load for this component
 
-class CurrentSituation(Website_Component):
+class CurrentSituation(Website_Component): # Uses the store_required_data from Website_component
     def __init__(self, data):
         start_date = datetime.today() - timedelta(days=SHOW_HISTORIC_DAYS)
-        self.store_required_data(data, USE_DATA, start_date=start_date)
+        self.store_required_data(data, USE_DATA, start_date=start_date) # fills self.data with required data
 
     def get_html(self):
+        """
+            Creates the HTML for the element.
+            Graphs use the data in self.data
+        """
         return [
             html.Div(
                 className="container",

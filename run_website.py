@@ -1,3 +1,7 @@
+"""
+    runs the website
+"""
+
 from website import Website
 import sys
 

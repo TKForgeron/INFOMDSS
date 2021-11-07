@@ -2,7 +2,7 @@ from dash import html
 
 class Header:
     def __init__(self):
-        False
+        pass
 
     def get_html(self):
         return [html.Div(

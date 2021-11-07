@@ -1,3 +1,5 @@
+# Configuration the same format as vaccination_overview_config.py, take a look at that file for documentation.
+
 import numpy as np
 from dash import html
 
@@ -130,34 +132,6 @@ keys = [
         'data_type': 'measures',
         'description': meaure_description
     },
-    # {
-    #     'key_name': 'C7_Restrictions on internal movement',
-    #     'value_range': [0, 2], 'steps': None,
-    #     'colors': 'norm',
-    #     'label': 'Restrictions on internal movement',
-    #     'labels_desc':
-    #         '''0 - no measures
-    #             1 - recommend not to travel between regions/cities
-    #             2 - internal movement restrictions in place
-    #             Blank - no data''',
-    #     'data_type': 'measures',
-    #     'description': meaure_description
-    # },
-    # {
-    #     'key_name': 'C8_International travel controls',
-    #     'value_range': [0, 4], 'steps': None,
-    #     'colors': 'norm',
-    #     'label': 'International travel controls',
-    #     'labels_desc':
-    #         '''0 - no restrictions
-    #             1 - screening arrivals
-    #             2 - quarantine arrivals from some or all regions
-    #             3 - ban arrivals from some regions
-    #             4 - ban on all regions or total border closure
-    #             Blank - no data''',
-    #     'data_type': 'measures',
-    #     'description': meaure_description
-    # },
     {
         'key_name': 'H7_Vaccination policy',
         'value_range': [0, 5], 'steps': None,
@@ -228,17 +202,4 @@ keys = [
         'data_type': 'measures',
         'description': meaure_description
     },
-    # {
-    #     'key_name': 'H1_Public information campaigns',
-    #     'value_range': [0, 2], 'steps': None,
-    #     'colors': 'norm',
-    #     'label': 'Public information campaigns',
-    #     'labels_desc':
-    #         '''	0 - no Covid-19 public information campaign
-    #             1 - public officials urging caution about Covid-19
-    #             2- coordinated public information campaign (eg across traditional and social media)
-    #             Blank - no data''',
-    #     'data_type': 'measures',
-    #     'description': meaure_description
-    # },
 ]
