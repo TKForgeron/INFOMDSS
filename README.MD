@@ -1,7 +1,9 @@
 # COVID-19 Dashboard
 This project is part of the **Data Science & Society** group project and is created by **Group 10**. For more details about the project please refer to the project documentation
 
----
+## Important!
+
+Due to github size limits the `./data` folder is compressed as `data.zip`, please extract this folder.
 
 ## Run Dashboard with docker
 
