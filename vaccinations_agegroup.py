@@ -23,7 +23,7 @@ class Vaccinations_AgeGroup(Website_Component):
                         children= [
                             html.H4('Vaccinations Per Age Group'),
                             dcc.Graph(id="cs_per_age_graph", className="legendstyle",figure={
-                            'data': self.agegroups_data(self),
+                            'data': self.agegroups_data(),
                             'layout': {
                                 'plot_bgcolor': 'rgb(251, 251, 251)',
                                 'hoverlabel': {

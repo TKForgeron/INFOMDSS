@@ -17,9 +17,8 @@ USE_DATA = [
 ] # Defines wich df to load for this component
 
 class Hospitalizations_Overview(Website_Component):
-    def __init__(self, data, app):
+    def __init__(self, data):
         self.store_required_data(data, USE_DATA)
-        self.app = app
         self.traces = {}
         self.keys = config.keys # The Keys config has data on what keys to use for overaying data on the graphs 
         self.preprocess_keys() # process the keys described above

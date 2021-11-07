@@ -25,10 +25,9 @@ class Website:
         if ('-dev' in args or '--debug' in args):
             self.ip = '127.0.0.1'
             self.debug = True
-        self.data = Data_Importer(no_cache=no_cache).get_data() # Gets the data
-        self.app = dash.Dash(__name__)
+        self.data = Data_Importer(no_cache=no_cache).get_data() # Gets the dat
         self.get_html() # populates the self.html
-        self.run_website(html)
+        self.run_website()
 
 
     def get_html(self):
@@ -42,15 +41,15 @@ class Website:
 
         allHtml = allHtml + Measure_Strictness(self.data).get_html()
 
-        cases_overview = Cases_Overview(self.data, self.app)
+        cases_overview = Cases_Overview(self.data)
         callbacks = callbacks + cases_overview.get_callbacks()
         allHtml = allHtml + cases_overview.get_html()
 
-        hospitalization_overview = Hospitalizations_Overview(self.data, self.app)
+        hospitalization_overview = Hospitalizations_Overview(self.data)
         callbacks = callbacks + hospitalization_overview.get_callbacks()
         allHtml = allHtml + hospitalization_overview.get_html()
 
-        vaccinations_overview = Vaccinations_Overview(self.data, self.app)
+        vaccinations_overview = Vaccinations_Overview(self.data)
         callbacks = callbacks + vaccinations_overview.get_callbacks()
         allHtml = allHtml + vaccinations_overview.get_html()
 
@@ -85,11 +84,12 @@ class Website:
         )
 
     def run_website(self):
+        app = dash.Dash(__name__)
         for c in self.callbacks:
-            self.app.callback(c['output'], c['input'])(c['funct'])
-        self.app.layout = html.Div(children=self.html)
-        self.app.title = 'DSS Dashboard'
-        self.app.run_server(debug=self.debug, host=self.host)
+            app.callback(c['output'], c['input'])(c['funct'])
+        app.layout = html.Div(children=self.html)
+        app.title = 'DSS Dashboard'
+        app.run_server(debug=self.debug, host=self.host)
     
     def print_launch(self):
         print('|------------------------------------------------|')
